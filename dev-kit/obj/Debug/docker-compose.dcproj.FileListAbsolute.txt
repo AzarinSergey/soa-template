@@ -1,0 +1,11 @@
+C:\Users\azarin.sa\Desktop\tmp\Consul\bin\Debug\appsettings.Development.json
+C:\Users\azarin.sa\Desktop\tmp\Consul\bin\Debug\appsettings.json
+C:\Users\azarin.sa\Desktop\tmp\Consul\bin\Debug\Properties\launchSettings.json
+C:\Users\azarin.sa\Desktop\tmp\Consul\bin\Debug\Api.Gw.exe
+C:\Users\azarin.sa\Desktop\tmp\Consul\bin\Debug\Api.Gw.dll
+C:\Users\azarin.sa\Desktop\tmp\Consul\bin\Debug\Consul.dll
+C:\Users\azarin.sa\Desktop\tmp\Consul\bin\Debug\Newtonsoft.Json.dll
+C:\Users\azarin.sa\Desktop\tmp\Consul\bin\Debug\Api.Gw.pdb
+C:\Users\azarin.sa\Desktop\tmp\Consul\obj\Debug\docker-compose.dcprojAssemblyReference.cache
+C:\Users\azarin.sa\Desktop\tmp\Consul\obj\Debug\docker-compose.dcproj.CoreCompileInputs.cache
+C:\Users\azarin.sa\Desktop\tmp\Consul\obj\Debug\docker-compose.dcproj.CopyComplete
