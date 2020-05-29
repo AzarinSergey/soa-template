@@ -3,19 +3,18 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>a8df4d1d-7faf-443d-8d69-438f833b77ad</ProjectGuid>
+    <ProjectGuid>b8e8ed8c-4bd2-4375-b28b-597f1c844a70</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
-    <DockerServiceName>api.gw</DockerServiceName>
-    <DockerfileTag>lcg</DockerfileTag>
+    <DockerServiceName>svc.implementation</DockerServiceName>
+    <DockerComposeBaseFilePath>.dev-env/docker-compose-development</DockerComposeBaseFilePath>
   </PropertyGroup>
   <ItemGroup>
-    <None Include=".config\traefik.toml" />
     <None Include=".env" />
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
-    <None Include="docker-compose.yml" />
-    <None Include=".dockerignore" />
+    <None Include=".dev-env\docker-compose-development.override.yml" />
+    <None Include=".dev-env\docker-compose-development.yml" />
+    <None Include=".dev-env\reverce-proxy\Dockerfile" />
+    <None Include=".dev-env\reverce-proxy\traefik.toml" />
+    <None Include=".dev-env\service-discovery\Dockerfile" />
   </ItemGroup>
 </Project>

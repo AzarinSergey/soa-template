@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+  svc:
+    image: ${LOGO}-${APP_NAME}/svc
+    container_name: ${LOGO}-${APP_NAME}-svc
+    environment:
+      - ServiceConfig__ServiceName=${LOGO}-${APP_NAME}-svc
+      - ServiceConfig__ServiceID=${LOGO}-${APP_NAME}-svc
+      - ServiceConfig__ServiceAddress=http://${LOGO}-${APP_NAME}-svc:80
+      - ServiceConfig__ServiceDiscoveryAddress=http://consul-server-get-start:8500
+      - ServiceConfig__Tags__0=traefik.enable=true
+      - ServiceConfig__Tags__1=traefik.tags=exposed
+      - ServiceConfig__Tags__2=traefik.http.routers.${LOGO}-${APP_NAME}-svc.rule=Host(`localhost`) && PathPrefix(`/${LOGO}-${APP_NAME}-svc`)
+      - ServiceConfig__Tags__3=traefik.http.middlewares.${LOGO}-${APP_NAME}-svc-stripprefix.stripprefix.prefixes=/${LOGO}-${APP_NAME}-svc
+      - ServiceConfig__Tags__4=traefik.http.routers.${LOGO}-${APP_NAME}-svc.middlewares=${LOGO}-${APP_NAME}-svc-stripprefix@consulcatalog
+    build:
+      context: .
+      dockerfile: ../src/services/Svc/Svc.Implementation/Dockerfile
+      labels:
+        - app.company=${LOGO}
+        - app.name=${APP_NAME}
+
+  consul-server:
+    image: consul:latest
+    container_name: consul-server-get-start
+    command: consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client='0.0.0.0' -data-dir=/tmp/consul
+    environment: 
+      - CONSUL_LOCAL_CONFIG={"datacenter":"east-aws","data_dir":"/opt/consul","log_level":"DEBUG","node_name":"develop","server":true}
+
+  reverse-proxy:
+    image: traefik:latest
+    container_name: reverse-proxy
+    volumes:
+      - ./reverce-proxy/traefik.toml:/etc/traefik/traefik.toml:rw
+    depends_on:
+      - consul-server

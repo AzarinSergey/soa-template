@@ -1,11 +1,11 @@
 version: '3.4'
 
 services:
-  api.gw:
+  svc:
     build:
       labels:
         com.microsoft.created-by: "visual-studio"
-        com.microsoft.visual-studio.project-name: "Api.Gw"
+        com.microsoft.visual-studio.project-name: "Svc.Implementation"
     volumes:
       - C:\Users\azarin.sa\vsdbg\vs2017u5:/remote_debugger:rw
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -14,8 +14,8 @@ services:
     entrypoint: tail -f /dev/null
     labels:
       com.microsoft.visualstudio.debuggee.program: "dotnet"
-      #com.microsoft.visualstudio.debuggee.arguments: " $debuggee_arguments_probing_paths_api.gw$ \"/app/Api.Gw.dll\""
+      #com.microsoft.visualstudio.debuggee.arguments: " $debuggee_arguments_probing_paths_svc$ \"/app/Svc.Implementation.dll\""
       com.microsoft.visualstudio.debuggee.workingdirectory: "/app"
       com.microsoft.visualstudio.debuggee.killprogram: "/bin/sh -c \"if PID=$$(pidof dotnet); then kill $$PID; fi\""
-      com.microsoft.visual-studio.project-name: "Api.Gw"
+      com.microsoft.visual-studio.project-name: "Svc.Implementation"
     tty: true

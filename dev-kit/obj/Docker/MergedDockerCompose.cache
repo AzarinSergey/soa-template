@@ -1,24 +1,7 @@
 networks:
-  pet-network:
-    ipam:
-      driver: default
+  exp-appname:
+    driver: bridge
 services:
-  api.gw:
-    build:
-      context: C:\Users\azarin.sa\Desktop\tmp\Consul
-      dockerfile: Api.Gw/Dockerfile
-      labels:
-        app.company: lcg
-        app.name: research
-    container_name: lcg-research-api-gw
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-    image: lcg-research-api-gw/0.0.1
-    networks:
-      pet-network: {}
-    ports:
-    - published: 33310
-      target: 80
   consul-server:
     command: consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client='0.0.0.0'
       -data-dir=/tmp/consul
@@ -27,7 +10,7 @@ services:
       CONSUL_LOCAL_CONFIG: '{"datacenter":"east-aws","data_dir":"/opt/consul","log_level":"DEBUG","node_name":"develop","server":true}'
     image: consul:latest
     networks:
-      pet-network: {}
+      exp-appname: {}
     ports:
     - published: 8500
       target: 8500
@@ -37,12 +20,38 @@ services:
     - consul-server
     image: traefik:latest
     networks:
-      pet-network: {}
+      exp-appname: {}
     ports:
     - published: 33399
       target: 5001
     - published: 33398
       target: 8080
     volumes:
-    - C:\Users\azarin.sa\Desktop\tmp\Consul\.dev-env\traefik.toml:/etc/traefik/traefik.toml:rw
+    - C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\.dev-env\reverce-proxy\traefik.toml:/etc/traefik/traefik.toml:rw
+  svc:
+    build:
+      context: C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\.dev-env
+      dockerfile: ../src/services/Svc/Svc.Implementation/Dockerfile
+      labels:
+        app.company: exp
+        app.name: appname
+    container_name: exp-appname-svc
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ServiceConfig__ServiceAddress: http://exp-appname-svc:80
+      ServiceConfig__ServiceDiscoveryAddress: http://consul-server-get-start:8500
+      ServiceConfig__ServiceID: exp-appname-svc
+      ServiceConfig__ServiceName: exp-appname-svc
+      ServiceConfig__Tags__0: traefik.enable=true
+      ServiceConfig__Tags__1: traefik.tags=exposed
+      ServiceConfig__Tags__2: traefik.http.routers.exp-appname-svc.rule=Host(`localhost`)
+        && PathPrefix(`/exp-appname-svc`)
+      ServiceConfig__Tags__3: traefik.http.middlewares.exp-appname-svc-stripprefix.stripprefix.prefixes=/exp-appname-svc
+      ServiceConfig__Tags__4: traefik.http.routers.exp-appname-svc.middlewares=exp-appname-svc-stripprefix@consulcatalog
+    image: exp-appname/svc
+    networks:
+      exp-appname: {}
+    ports:
+    - published: 33300
+      target: 80
 version: '3.4'

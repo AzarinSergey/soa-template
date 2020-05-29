@@ -1,0 +1,17 @@
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\services\Svc\Svc.Model\bin\Debug\netcoreapp3.1\Svc.Model.deps.json
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\services\Svc\Svc.Model\bin\Debug\netcoreapp3.1\Svc.Model.dll
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\services\Svc\Svc.Model\bin\Debug\netcoreapp3.1\Svc.Model.pdb
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\services\Svc\Svc.Model\obj\Debug\netcoreapp3.1\Svc.Model.csproj.CoreCompileInputs.cache
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\services\Svc\Svc.Model\obj\Debug\netcoreapp3.1\Svc.Model.AssemblyInfoInputs.cache
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\services\Svc\Svc.Model\obj\Debug\netcoreapp3.1\Svc.Model.AssemblyInfo.cs
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\services\Svc\Svc.Model\obj\Debug\netcoreapp3.1\Svc.Model.dll
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\services\Svc\Svc.Model\obj\Debug\netcoreapp3.1\Svc.Model.pdb
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\services\Svc\Svc.Model\obj\Debug\netcoreapp3.1\Svc.Model.csprojAssemblyReference.cache
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\src\services\Svc\Svc.Model\bin\Debug\netcoreapp3.1\Svc.Model.deps.json
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\src\services\Svc\Svc.Model\bin\Debug\netcoreapp3.1\Svc.Model.dll
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\src\services\Svc\Svc.Model\bin\Debug\netcoreapp3.1\Svc.Model.pdb
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\src\services\Svc\Svc.Model\obj\Debug\netcoreapp3.1\Svc.Model.csproj.CoreCompileInputs.cache
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\src\services\Svc\Svc.Model\obj\Debug\netcoreapp3.1\Svc.Model.AssemblyInfoInputs.cache
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\src\services\Svc\Svc.Model\obj\Debug\netcoreapp3.1\Svc.Model.AssemblyInfo.cs
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\src\services\Svc\Svc.Model\obj\Debug\netcoreapp3.1\Svc.Model.dll
+C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\src\services\Svc\Svc.Model\obj\Debug\netcoreapp3.1\Svc.Model.pdb

@@ -1,29 +1,29 @@
 version: '3.4'
 
 services:
-  api.gw:
-    image: lcg-research-api-gw/0.0.1:dev
+  svc:
+    image: exp-appname/svc:dev
     build:
       target: base
       labels:
         com.microsoft.created-by: "visual-studio"
-        com.microsoft.visual-studio.project-name: "Api.Gw"
+        com.microsoft.visual-studio.project-name: "Svc.Implementation"
     environment:
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS=true
-      #- NUGET_FALLBACK_PACKAGES=$container_paths_to_fallback_packages_api.gw$
+      #- NUGET_FALLBACK_PACKAGES=$container_paths_to_fallback_packages_svc$
     volumes:
-      - C:\Users\azarin.sa\Desktop\tmp\Consul\Api.Gw:/app
-      - C:\Users\azarin.sa\Desktop\tmp\Consul:/src
+      - C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\src\services\Svc\Svc.Implementation:/app
+      - C:\Users\azarin.sa\Desktop\enterprise-dev-kit\dev-kit\.dev-env:/src
       - C:\Users\azarin.sa\vsdbg\vs2017u5:/remote_debugger:rw
-#$nuget_volume_mapping_api.gw$
+#$nuget_volume_mapping_svc$
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
 
     entrypoint: tail -f /dev/null
     labels:
       com.microsoft.visualstudio.debuggee.program: "dotnet"
-      #com.microsoft.visualstudio.debuggee.arguments: " $debuggee_arguments_probing_paths_api.gw$ \"/app/bin/Release/netcoreapp3.1/Api.Gw.dll\""
+      #com.microsoft.visualstudio.debuggee.arguments: " $debuggee_arguments_probing_paths_svc$ \"/app/bin/Debug/netcoreapp3.1/Svc.Implementation.dll\""
       com.microsoft.visualstudio.debuggee.workingdirectory: "/app"
       com.microsoft.visualstudio.debuggee.killprogram: "/bin/sh -c \"if PID=$$(pidof dotnet); then kill $$PID; fi\""
     tty: true

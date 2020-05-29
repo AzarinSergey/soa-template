@@ -1,0 +1,28 @@
+version: '3.4'
+
+networks:
+  exp-appname:
+    driver: bridge
+
+services:
+  svc:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "33300:80"
+    networks:
+      - exp-appname
+
+  consul-server:
+    ports:
+      - "8500:8500"
+    networks:
+      exp-appname:
+
+  reverse-proxy:
+    ports:
+      - "33398:8080"
+      - "33399:5001"
+    networks:
+      exp-appname:
+

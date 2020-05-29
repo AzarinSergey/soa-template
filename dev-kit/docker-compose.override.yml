@@ -1,8 +1,0 @@
-version: '3.4'
-
-services:
-  api.gw:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "33310:80"
