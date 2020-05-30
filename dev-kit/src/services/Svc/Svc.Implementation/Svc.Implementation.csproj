@@ -12,4 +12,12 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ServiceDiscovery\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Core.Service.ServiceDiscovery\Core.Service.ServiceDiscovery.csproj" />
+  </ItemGroup>
+
 </Project>

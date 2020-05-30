@@ -7,15 +7,19 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Svc", "Svc", "{3B38EB55-4C2B-4208-8A1A-91EBB35A64CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svc.Contract.Service", "src\services\Svc\Svc.Contract.Service\Svc.Contract.Service\Svc.Contract.Service.csproj", "{A31EAE23-653D-4E93-B5FC-F857B8584476}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svc.Contract.Service", "src\services\Svc\Svc.Contract.Service\Svc.Contract.Service.csproj", "{A31EAE23-653D-4E93-B5FC-F857B8584476}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svc.Contract.Messaging", "src\services\Svc\Svc.Contract.Messaging\Svc.Contract.Messaging\Svc.Contract.Messaging.csproj", "{4A4C2055-F991-42D3-ABD8-F83D49524001}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svc.Contract.Messaging", "src\services\Svc\Svc.Contract.Messaging\Svc.Contract.Messaging.csproj", "{4A4C2055-F991-42D3-ABD8-F83D49524001}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svc.Domain", "src\services\Svc\Svc.Domain\Svc.Domain.csproj", "{237BD498-A63D-4D12-910F-648A407BA190}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svc.Implementation", "src\services\Svc\Svc.Implementation\Svc.Implementation.csproj", "{8C46731A-34F0-4CAA-92EE-F08E578E79BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svc.Model", "src\services\Svc\Svc.Model\Svc.Model.csproj", "{9AA579CB-4F58-49CE-AA2B-87BA62BDBB25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".core", ".core", "{55CD739B-53E4-4EFD-84A6-7A178127A754}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Service.ServiceDiscovery", "..\Core.Service.ServiceDiscovery\Core.Service.ServiceDiscovery.csproj", "{7116D2C5-A3E2-409F-BA60-600DC84B49AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +51,10 @@ Global
 		{9AA579CB-4F58-49CE-AA2B-87BA62BDBB25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AA579CB-4F58-49CE-AA2B-87BA62BDBB25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AA579CB-4F58-49CE-AA2B-87BA62BDBB25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7116D2C5-A3E2-409F-BA60-600DC84B49AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7116D2C5-A3E2-409F-BA60-600DC84B49AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7116D2C5-A3E2-409F-BA60-600DC84B49AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7116D2C5-A3E2-409F-BA60-600DC84B49AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +65,7 @@ Global
 		{237BD498-A63D-4D12-910F-648A407BA190} = {3B38EB55-4C2B-4208-8A1A-91EBB35A64CF}
 		{8C46731A-34F0-4CAA-92EE-F08E578E79BD} = {3B38EB55-4C2B-4208-8A1A-91EBB35A64CF}
 		{9AA579CB-4F58-49CE-AA2B-87BA62BDBB25} = {3B38EB55-4C2B-4208-8A1A-91EBB35A64CF}
+		{7116D2C5-A3E2-409F-BA60-600DC84B49AB} = {55CD739B-53E4-4EFD-84A6-7A178127A754}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2AF9839B-1F28-4267-927A-F888045F1BF6}

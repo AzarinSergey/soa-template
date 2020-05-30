@@ -1,13 +1,14 @@
-using Api.Gw.ServiceDiscovery;
+using Core.Service.ServiceDiscovery;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 
-namespace Api.Gw
+namespace Svc.Implementation
 {
     public class Startup
     {
@@ -17,7 +18,7 @@ namespace Api.Gw
 
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile($"appsettings.json")
+                .AddJsonFile($"appsettings.json", reloadOnChange: true, optional: false)
                 .AddJsonFile($"appsettings.{environmentName}.json", reloadOnChange: true, optional: true)
                 .AddEnvironmentVariables()
                 .Build();
@@ -25,14 +26,11 @@ namespace Api.Gw
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddConsul(Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -40,17 +38,24 @@ namespace Api.Gw
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseConsul();
-
             app.UseRouting();
+
+            const string healthPath = "/tool/health";
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGet(healthPath, async context =>
+                {
+                    await context.Response.WriteAsync("===> OK <===");
+                });
+
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Hello World!");
                 });
             });
+
+            app.UseConsul(healthPath);
         }
     }
 }

@@ -6,48 +6,30 @@ using Consul;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Api.Gw.ServiceDiscovery
+namespace Core.Service.ServiceDiscovery
 {
-    public static class ServiceCollectionExtensions
+    public static class ApplicationBuilderExtensions
     {
-        private static string _host;
-
-        public static IServiceCollection AddConsul(this IServiceCollection services, IConfiguration configuration)
+        public static IApplicationBuilder UseConsul(this IApplicationBuilder app, string healthCheckPath)
         {
-            services.Configure<ConsulConfig>(configuration.GetSection("ServiceConfig"));
-            services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig =>
-            {
-                var host = configuration["ServiceConfig:serviceDiscoveryAddress"];
-                _host = host;
-                consulConfig.Address = new Uri(host);
-            }));
-            return services;
-        }
+            var logger = app.ApplicationServices.GetRequiredService<ILoggerFactory>().CreateLogger("Consul.AspNetCore");
 
-        public static IApplicationBuilder UseConsul(this IApplicationBuilder app)
-        {
-            const string healthCheckPath = "/tool/health/ping";
-            app.UseRouter(builder =>
-            {
-                builder.MapGet(healthCheckPath, context => context.Response.WriteAsync("OK"));
-            });
+            logger.LogInformation($"Heath check endpoint on $'{healthCheckPath}' ");
 
             var consulClient = app.ApplicationServices.GetRequiredService<IConsulClient>();
             var consulConfig = app.ApplicationServices.GetRequiredService<IOptions<ConsulConfig>>();
-            var logger = app.ApplicationServices.GetRequiredService<ILoggerFactory>().CreateLogger("Consul.AspNetCore");
             var lifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
             var uri = new Uri(consulConfig.Value.ServiceAddress);
             var dnsIpAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList
                 .First(o => o.AddressFamily == AddressFamily.InterNetwork).ToString();
 
-            var registration = new AgentServiceRegistration()
+            var registrationModel = new AgentServiceRegistration
             {
                 ID = $"{consulConfig.Value.ServiceId}-{uri.Port}",
                 Name = consulConfig.Value.ServiceName,
@@ -64,13 +46,13 @@ namespace Api.Gw.ServiceDiscovery
             };
 
             logger.LogInformation("Registering with Consul");
-            consulClient.Agent.ServiceDeregister(registration.ID).ConfigureAwait(true);
-            consulClient.Agent.ServiceRegister(registration).ConfigureAwait(true);
+            consulClient.Agent.ServiceDeregister(registrationModel.ID).ConfigureAwait(true);
+            consulClient.Agent.ServiceRegister(registrationModel).ConfigureAwait(true);
 
             lifetime.ApplicationStopping.Register(() =>
             {
                 logger.LogInformation("Unregistering from Consul");
-                consulClient.Agent.ServiceDeregister(registration.ID).ConfigureAwait(true);
+                consulClient.Agent.ServiceDeregister(registrationModel.ID).ConfigureAwait(true);
             });
 
             return app;
