@@ -3,7 +3,7 @@ using Consul;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Core.Service.ServiceDiscovery
+namespace Core.Service.Host.ServiceDiscovery
 {
     public static class ServiceCollectionExtensions
     {

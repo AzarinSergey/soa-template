@@ -1,61 +1,26 @@
-using Core.Service.ServiceDiscovery;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
+using Core.Service.Host;
 
 namespace Svc.Implementation
 {
-    public class Startup
+    public class Startup : DiscoverableServiceStartup
     {
-        public Startup(IConfiguration configuration)
+        public override void AddServices(IServiceCollection c)
+        { }
+
+        public override void ServiceConfiguration(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            Configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile($"appsettings.json", reloadOnChange: true, optional: false)
-                .AddJsonFile($"appsettings.{environmentName}.json", reloadOnChange: true, optional: true)
-                .AddEnvironmentVariables()
-                .Build();
-        }
-
-        public IConfiguration Configuration { get; }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddConsul(Configuration);
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
+            app.UseEndpoints(builder =>
             {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseRouting();
-
-            const string healthPath = "/tool/health";
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet(healthPath, async context =>
+                builder.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("===> OK <===");
+                    await context.Response.WriteAsync("Alive");
                 });
 
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
             });
-
-            app.UseConsul(healthPath);
         }
     }
 }

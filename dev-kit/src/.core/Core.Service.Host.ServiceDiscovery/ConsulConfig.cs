@@ -1,4 +1,4 @@
-﻿namespace Core.Service.ServiceDiscovery
+﻿namespace Core.Service.Host.ServiceDiscovery
 {
     public class ConsulConfig
     {

@@ -13,11 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ServiceDiscovery\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\.core\Core.Service.ServiceDiscovery\Core.Service.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\..\..\.core\Core.Service.Host\Core.Service.Host.csproj" />
   </ItemGroup>
 
 </Project>

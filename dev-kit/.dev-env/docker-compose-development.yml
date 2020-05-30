@@ -2,18 +2,18 @@ version: '3.4'
 
 services:
   svc:
-    image: ${LOGO}-${APP_NAME}/svc
-    container_name: ${LOGO}-${APP_NAME}-svc
+    image: ${FULL_NAME}/svc
+    container_name: ${FULL_NAME}-svc
     environment:
-      - ServiceConfig__ServiceName=${LOGO}-${APP_NAME}-svc
-      - ServiceConfig__ServiceID=${LOGO}-${APP_NAME}-svc
-      - ServiceConfig__ServiceAddress=http://${LOGO}-${APP_NAME}-svc:80
+      - ServiceConfig__ServiceName=${FULL_NAME}-svc
+      - ServiceConfig__ServiceID=${FULL_NAME}-svc
+      - ServiceConfig__ServiceAddress=http://${FULL_NAME}-svc:80
       - ServiceConfig__ServiceDiscoveryAddress=http://consul-server-get-start:8500
       - ServiceConfig__Tags__0=traefik.enable=true
       - ServiceConfig__Tags__1=traefik.tags=exposed
-      - ServiceConfig__Tags__2=traefik.http.routers.${LOGO}-${APP_NAME}-svc.rule=Host(`localhost`) && PathPrefix(`/${LOGO}-${APP_NAME}-svc`)
-      - ServiceConfig__Tags__3=traefik.http.middlewares.${LOGO}-${APP_NAME}-svc-stripprefix.stripprefix.prefixes=/${LOGO}-${APP_NAME}-svc
-      - ServiceConfig__Tags__4=traefik.http.routers.${LOGO}-${APP_NAME}-svc.middlewares=${LOGO}-${APP_NAME}-svc-stripprefix@consulcatalog
+      - ServiceConfig__Tags__2=traefik.http.routers.${FULL_NAME}-svc.rule=Host(`localhost`) && PathPrefix(`/${FULL_NAME}-svc`)
+      - ServiceConfig__Tags__3=traefik.http.middlewares.${FULL_NAME}-svc-stripprefix.stripprefix.prefixes=/${FULL_NAME}-svc
+      - ServiceConfig__Tags__4=traefik.http.routers.${FULL_NAME}-svc.middlewares=${FULL_NAME}-svc-stripprefix@consulcatalog
     build:
       context: .
       dockerfile: ../src/services/Svc/Svc.Implementation/Dockerfile
