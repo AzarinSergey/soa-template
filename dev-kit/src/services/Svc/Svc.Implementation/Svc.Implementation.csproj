@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\.core\Core.Service.Host\Core.Service.Host.csproj" />
+    <ProjectReference Include="..\Svc.Contract.Service\Svc.Contract.Service.csproj" />
   </ItemGroup>
 
 </Project>
