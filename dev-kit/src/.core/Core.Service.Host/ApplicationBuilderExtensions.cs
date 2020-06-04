@@ -11,24 +11,14 @@ using System.Threading.Tasks;
 
 namespace Core.Service.Host
 {
-    //localhost:33399/exp-appname-svc/exampleservicestate/GetState
-    //{
-    //      "value": "Trololo",
-    //      "ctx":
-    //      {
-    //          "CrossContext":
-    //          {
-    //              "Uuid": "gh57894hgo9wgyh8934gonv8934gh8934"
-    //          }
-    //      }
-    //}
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder UseServiceEndpoint<TService>(this IApplicationBuilder app, TService instance)
-        where TService : class
+        public static IApplicationBuilder UseServiceEndpoint(this IApplicationBuilder app, Type serviceType)
         {
-            var serviceType = typeof(TService);
-            if(!serviceType.IsInterface)
+            var instance = app.ApplicationServices.GetService(serviceType);
+
+            //TODO: вынести логику получения имени сервисного интерфейса для построения пути вызова
+            if (!serviceType.IsInterface)
                 throw new ArgumentException($"'TService' - interface type only allowed.");
 
             var serviceName = serviceType.Name.StartsWith("I")

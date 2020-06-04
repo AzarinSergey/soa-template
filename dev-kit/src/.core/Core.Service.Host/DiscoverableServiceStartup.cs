@@ -5,12 +5,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Consul;
 using Core.Service.Host.ServiceDiscovery;
 
 namespace Core.Service.Host
 {
     public abstract class DiscoverableServiceStartup
     {
+        protected abstract Type[] ServiceContractTypes { get; }
+
         protected DiscoverableServiceStartup()
         {
             var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -23,7 +26,7 @@ namespace Core.Service.Host
                 .Build();
         }
 
-        protected IConfigurationRoot Configuration { get; private set; }
+        protected IConfigurationRoot Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -50,7 +53,16 @@ namespace Core.Service.Host
                 });
             });
 
-            app.UseConsul(healthPath);
+            foreach (var type in ServiceContractTypes)
+            {
+                app.UseServiceEndpoint(type);
+            }
+            var consulClient = app.ApplicationServices.GetRequiredService<IConsulClient>();
+            app.UseConsul(consulClient, healthPath, ServiceContractTypes);
+
+            HttpServiceProxy.ReverseProxyAddress = Configuration.Get<ServiceConfig>().ReverseProxyAddress;
+            HttpServiceProxy.Client = consulClient;
+
 
             ServiceConfiguration(app, env);
         }

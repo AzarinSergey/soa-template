@@ -1,6 +1,6 @@
 ﻿namespace Core.Service.Host.ServiceDiscovery
 {
-    public class ConsulConfig
+    public class ServiceConfig
     {
         public string ServiceAddress { get; set; }
 
@@ -9,5 +9,6 @@
         public string ServiceName { get; set; }
 
         public string[] Tags { get; set; }
+        public string ReverseProxyAddress { get; set; }
     }
 }

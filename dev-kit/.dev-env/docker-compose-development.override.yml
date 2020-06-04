@@ -5,6 +5,14 @@ networks:
     driver: bridge
 
 services:
+  api-test:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "33301:80"
+    networks:
+      - exp-appname
+
   svc:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

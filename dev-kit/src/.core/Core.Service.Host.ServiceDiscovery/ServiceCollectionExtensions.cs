@@ -9,7 +9,7 @@ namespace Core.Service.Host.ServiceDiscovery
     {
         public static IServiceCollection AddConsul(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<ConsulConfig>(configuration.GetSection("ServiceConfig"));
+            services.Configure<ServiceConfig>(configuration.GetSection("ServiceConfig"));
             services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig =>
             {
                 var host = configuration["ServiceConfig:serviceDiscoveryAddress"];

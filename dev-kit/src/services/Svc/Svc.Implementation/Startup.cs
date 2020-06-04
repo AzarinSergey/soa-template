@@ -1,3 +1,4 @@
+using System;
 using Core.Service.Host;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,16 +11,20 @@ namespace Svc.Implementation
 {
     public class Startup : DiscoverableServiceStartup
     {
+        protected override Type[] ServiceContractTypes => new []
+            {
+                typeof(IExampleServiceState)
+            };
+
         public override void AddServices(IServiceCollection c)
         {
+            c.AddSingleton<IExampleServiceState, ExampleService>();
             c.AddSingleton<ExampleService>();
             c.AddHostedService(provider => provider.GetService<ExampleService>());
         }
 
         public override void ServiceConfiguration(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseServiceEndpoint<IExampleServiceState>(app.ApplicationServices.GetService<ExampleService>());
-
             app.UseEndpoints(builder =>
             {
                 builder.MapGet("/", async context =>

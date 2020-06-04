@@ -6,19 +6,30 @@ namespace Svc.Implementation.Service
 {
     public partial class ExampleService : IExampleServiceState
     {
-        public Task WriteState(string value, CrossContext ctx, CancellationToken token)
+        public Task<string> UpdateState(int id, string value, CrossContext ctx, CancellationToken token)
         {
-            return Task.CompletedTask;
+            return Task.FromResult("public Task<string> UpdateState(int id, string value, CrossContext ctx, CancellationToken token)");
         }
 
-        public Task<string> GetState(string value, CrossContext ctx, CancellationToken token)
+        public Task<int> AddState(string value, CrossContext ctx, CancellationToken token)
         {
-            return Task.FromResult("public Task<string> GetState(string value, CrossContext ctx, CancellationToken token)");
+            return Task.FromResult(1);
         }
 
-        public Task<string> UpdateState(string value, CrossContext ctx, CancellationToken token)
+        //localhost:33399/exp-appname-svc/exampleservicestate/getstate
+        //{
+        //      "id": 123,
+        //      "ctx":
+        //      {
+        //          "CrossContext":
+        //          {
+        //              "Uuid": "gh57894hgo9wgyh8934gonv8934gh8934"
+        //          }
+        //      }
+        //}
+        public Task<string> GetState(int? id, CrossContext ctx, CancellationToken token)
         {
-            return Task.FromResult("public Task<string> UpdateState(string value, CrossContext ctx, CancellationToken token)");
+            return Task.FromResult("public Task<string> GetState(int? id, CrossContext ctx, CancellationToken token)");
         }
     }
 }
