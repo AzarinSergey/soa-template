@@ -22,7 +22,7 @@ namespace Core.Service.Host.ServiceDiscovery
 
             logger.LogInformation($"Heath check endpoint on $'{healthCheckPath}' ");
 
-            var consulConfig = app.ApplicationServices.GetRequiredService<IOptions<ServiceConfig>>();
+            var consulConfig = app.ApplicationServices.GetRequiredService<IOptions<ServiceDiscoveryConfig>>();
             var lifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
             var uri = new Uri(consulConfig.Value.ServiceAddress);

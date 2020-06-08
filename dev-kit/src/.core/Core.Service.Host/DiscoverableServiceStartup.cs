@@ -33,7 +33,7 @@ namespace Core.Service.Host
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddConsul(Configuration);
-                        services.AddHttpClient();
+            services.AddHttpClient();
             AddServices(services);
         }
 
@@ -63,7 +63,7 @@ namespace Core.Service.Host
             var consulClient = app.ApplicationServices.GetRequiredService<IConsulClient>();
             app.UseConsul(consulClient, healthPath, ServiceContractTypes);
 
-            var settings = Configuration.GetSection("ServiceConfig").Get<ServiceConfig>();
+            var settings = Configuration.GetSection(typeof(ServiceDiscoveryConfig).Name).Get<ServiceDiscoveryConfig>();
             ServiceProxy
                 .Initialization(settings.ReverseProxyAddress,
                     app.ApplicationServices.GetRequiredService<IHttpClientFactory>(),

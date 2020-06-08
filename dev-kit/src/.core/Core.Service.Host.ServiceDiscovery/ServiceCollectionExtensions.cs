@@ -9,15 +9,14 @@ namespace Core.Service.Host.ServiceDiscovery
     {
         public static IServiceCollection AddConsul(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<ServiceConfig>(configuration.GetSection("ServiceConfig"));
+            var sectionKey = typeof(ServiceDiscoveryConfig).Name;
+            services.Configure<ServiceDiscoveryConfig>(configuration.GetSection(sectionKey));
             services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig =>
             {
-                var host = configuration["ServiceConfig:serviceDiscoveryAddress"];
+                var host = configuration[$"{sectionKey}:serviceDiscoveryAddress"];
                 consulConfig.Address = new Uri(host);
             }));
             return services;
         }
-
-        
     }
 }

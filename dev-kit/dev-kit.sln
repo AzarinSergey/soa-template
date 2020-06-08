@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Test", "src\services\Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Service.Host.ServiceDiscovery.Interfaces", "src\.core\Core.Service.Host.ServiceDiscovery.Interfaces\Core.Service.Host.ServiceDiscovery.Interfaces.csproj", "{BA6C66D1-D70D-4880-A8A6-2B8A258A034A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Service.Host.ServiceDiscovery.Consul", "src\.core\Core.Service.Host.ServiceDiscovery.Consul\Core.Service.Host.ServiceDiscovery.Consul.csproj", "{C9AAFF7C-BC38-4124-8C00-B4D5FFA4746A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{BA6C66D1-D70D-4880-A8A6-2B8A258A034A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA6C66D1-D70D-4880-A8A6-2B8A258A034A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA6C66D1-D70D-4880-A8A6-2B8A258A034A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9AAFF7C-BC38-4124-8C00-B4D5FFA4746A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9AAFF7C-BC38-4124-8C00-B4D5FFA4746A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9AAFF7C-BC38-4124-8C00-B4D5FFA4746A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9AAFF7C-BC38-4124-8C00-B4D5FFA4746A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +102,7 @@ Global
 		{63C26ADD-24BE-4408-B615-47E183DB1BE1} = {55CD739B-53E4-4EFD-84A6-7A178127A754}
 		{B394F219-25EB-4D07-A169-7F19E9C7A750} = {5775110D-811B-4530-87B9-5BC85CBCB145}
 		{BA6C66D1-D70D-4880-A8A6-2B8A258A034A} = {55CD739B-53E4-4EFD-84A6-7A178127A754}
+		{C9AAFF7C-BC38-4124-8C00-B4D5FFA4746A} = {55CD739B-53E4-4EFD-84A6-7A178127A754}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2AF9839B-1F28-4267-927A-F888045F1BF6}
