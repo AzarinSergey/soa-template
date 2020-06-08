@@ -13,8 +13,8 @@
     <None Include=".env" />
     <None Include=".dev-env\docker-compose-development.override.yml" />
     <None Include=".dev-env\docker-compose-development.yml" />
-    <None Include=".dev-env\reverce-proxy\Dockerfile" />
-    <None Include=".dev-env\reverce-proxy\traefik.toml" />
+    <None Include=".dev-env\reverse-proxy\Dockerfile" />
+    <None Include=".dev-env\reverse-proxy\traefik.toml" />
     <None Include=".dev-env\service-discovery\Dockerfile" />
   </ItemGroup>
 </Project>
