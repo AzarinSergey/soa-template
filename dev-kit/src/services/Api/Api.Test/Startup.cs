@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Svc.Contract.Service;
 using Svc.Implementation;
 using System;
+using Core.Service.Host.ServiceDiscovery.Proxy;
 
 namespace Api.Test
 {

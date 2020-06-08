@@ -4,20 +4,6 @@ services:
   api-test:
     image: ${FULL_NAME}/api-test
     container_name: ${FULL_NAME}-api-test
-    environment:
-      - ServiceConfig__ReverseProxyAddress=${REVERSE_PROXY_ADDRESS}
-      - ServiceConfig__ServiceName=${FULL_NAME}-api-test
-      - ServiceConfig__ServiceID=${FULL_NAME}-api-test
-      - ServiceConfig__ServiceAddress=http://${FULL_NAME}-api-test:80
-      - ServiceConfig__ServiceDiscoveryAddress=http://consul-server-get-start:8500
-      - ServiceConfig__Tags__0=traefik.enable=true
-      - ServiceConfig__Tags__1=traefik.tags=exposed
-      - ServiceConfig__Tags__2=traefik.http.routers.${FULL_NAME}-api-test.rule=Host(`localhost`) && PathPrefix(`/${FULL_NAME}-api-test`)
-      - ServiceConfig__Tags__3=traefik.http.middlewares.${FULL_NAME}-api-test-stripprefix.stripprefix.prefixes=/${FULL_NAME}-api-test
-      - ServiceConfig__Tags__4=traefik.http.routers.${FULL_NAME}-api-test.middlewares=${FULL_NAME}-api-test-stripprefix@consulcatalog
-      - ServiceConfig__Tags__5=traefik.http.routers.${FULL_NAME}-api-test-internal.rule=Host(`reverse-proxy`) && PathPrefix(`/${FULL_NAME}-api-test`)
-      - ServiceConfig__Tags__6=traefik.http.middlewares.${FULL_NAME}-api-test-internal-stripprefix.stripprefix.prefixes=/${FULL_NAME}-api-test
-      - ServiceConfig__Tags__7=traefik.http.routers.${FULL_NAME}-api-test-internal.middlewares=${FULL_NAME}-api-test-internal-stripprefix@consulcatalog
     build:
       context: .
       dockerfile: ../src/services/Api/Api.Test/Dockerfile
@@ -28,20 +14,6 @@ services:
   svc:
     image: ${FULL_NAME}/svc
     container_name: ${FULL_NAME}-svc
-    environment:
-      - ServiceConfig__ReverseProxyAddress=${REVERSE_PROXY_ADDRESS}
-      - ServiceConfig__ServiceName=${FULL_NAME}-svc
-      - ServiceConfig__ServiceID=${FULL_NAME}-svc
-      - ServiceConfig__ServiceAddress=http://${FULL_NAME}-svc:80
-      - ServiceConfig__ServiceDiscoveryAddress=http://consul-server-get-start:8500
-      - ServiceConfig__Tags__0=traefik.enable=true
-      - ServiceConfig__Tags__1=traefik.tags=exposed
-      - ServiceConfig__Tags__2=traefik.http.routers.${FULL_NAME}-svc.rule=Host(`localhost`) && PathPrefix(`/${FULL_NAME}-svc`)
-      - ServiceConfig__Tags__3=traefik.http.middlewares.${FULL_NAME}-svc-stripprefix.stripprefix.prefixes=/${FULL_NAME}-svc
-      - ServiceConfig__Tags__4=traefik.http.routers.${FULL_NAME}-svc.middlewares=${FULL_NAME}-svc-stripprefix@consulcatalog
-      - ServiceConfig__Tags__5=traefik.http.routers.${FULL_NAME}-svc-internal.rule=Host(`reverse-proxy`) && PathPrefix(`/${FULL_NAME}-svc`)
-      - ServiceConfig__Tags__6=traefik.http.middlewares.${FULL_NAME}-svc-internal-stripprefix.stripprefix.prefixes=/${FULL_NAME}-svc
-      - ServiceConfig__Tags__7=traefik.http.routers.${FULL_NAME}-svc-internal.middlewares=${FULL_NAME}-svc-internal-stripprefix@consulcatalog
     build:
       context: .
       dockerfile: ../src/services/Svc/Svc.Implementation/Dockerfile

@@ -8,6 +8,7 @@ using System;
 using System.Net.Http;
 using Consul;
 using Core.Service.Host.ServiceDiscovery;
+using Core.Service.Host.ServiceDiscovery.Proxy;
 
 namespace Core.Service.Host
 {
