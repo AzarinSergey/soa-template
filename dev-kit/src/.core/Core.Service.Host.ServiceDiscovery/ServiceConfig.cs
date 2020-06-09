@@ -2,6 +2,8 @@
 {
     public class ServiceDiscoveryConfig
     {
+        public string ServiceDiscoveryAddress { get; set; }
+
         public string ServiceAddress { get; set; }
 
         public string ServiceId { get; set; }

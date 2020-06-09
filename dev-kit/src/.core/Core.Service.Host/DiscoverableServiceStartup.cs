@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Core.Service.Host.ServiceDiscovery;
+using Core.Service.Host.ServiceDiscovery.Interfaces;
+using Core.Service.Host.ServiceDiscovery.Proxy;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -6,9 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Net.Http;
-using Consul;
-using Core.Service.Host.ServiceDiscovery;
-using Core.Service.Host.ServiceDiscovery.Proxy;
 
 namespace Core.Service.Host
 {
@@ -32,7 +32,7 @@ namespace Core.Service.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddConsul(Configuration);
+            services.AddServiceDiscovery(Configuration);
             services.AddHttpClient();
             AddServices(services);
         }
@@ -56,18 +56,15 @@ namespace Core.Service.Host
                 });
             });
 
-            foreach (var type in ServiceContractTypes)
-            {
-                app.UseServiceEndpoint(type);
-            }
-            var consulClient = app.ApplicationServices.GetRequiredService<IConsulClient>();
-            app.UseConsul(consulClient, healthPath, ServiceContractTypes);
+            var serviceDiscoveryProvider = app.ApplicationServices.GetRequiredService<IServiceDiscoveryProvider>();
+            app.UseServiceDiscovery(serviceDiscoveryProvider, healthPath, ServiceContractTypes);
+            app.UseServiceEndpoints(ServiceContractTypes);
 
             var settings = Configuration.GetSection(typeof(ServiceDiscoveryConfig).Name).Get<ServiceDiscoveryConfig>();
             ServiceProxy
                 .Initialization(settings.ReverseProxyAddress,
                     app.ApplicationServices.GetRequiredService<IHttpClientFactory>(),
-                    app.ApplicationServices.GetRequiredService<IConsulClient>());
+                    serviceDiscoveryProvider);
 
 
             ServiceConfiguration(app, env);

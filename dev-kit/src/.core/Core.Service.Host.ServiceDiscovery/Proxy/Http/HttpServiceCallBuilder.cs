@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Castle.DynamicProxy;
+using Core.Service.Host.ServiceDiscovery.Proxy.Http.Content;
+using System;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Castle.DynamicProxy;
-using Consul;
-using Core.Service.Host.ServiceDiscovery.Proxy.Http.Content;
 
 namespace Core.Service.Host.ServiceDiscovery.Proxy.Http
 {
@@ -24,28 +24,40 @@ namespace Core.Service.Host.ServiceDiscovery.Proxy.Http
         private static readonly MethodInfo HandleAsyncMethodInfo = typeof(HttpServiceCallBuilder)
             .GetMethod("BuildAsyncWithResult", BindingFlags.Instance | BindingFlags.NonPublic);
 
+        private readonly Func<Type, CancellationToken, Task<string>> _getServicePathPrefix;
         private readonly IHttpServiceDynamicInstance _dynamicProxy;
         private readonly Type _serviceType;
-        private readonly IKVEndpoint _servicePathStorage;
         private IInvocation _invocation;
-        private DefaultRequestContentBuilder _requestBuilder;
-        private HttpContent _requestContent;
 
-        public HttpServiceCallBuilder(IHttpServiceDynamicInstance dynamicProxy, Type serviceType, IKVEndpoint servicePathStorage)
+        private HttpContent _requestContent;
+        private CancellationToken _cancellationToken;
+
+
+        public HttpServiceCallBuilder(
+            IHttpServiceDynamicInstance dynamicProxy,
+            Type serviceType,
+            Func<Type, CancellationToken, Task<string>> getServicePathPrefix)
         {
             _dynamicProxy = dynamicProxy;
             _serviceType = serviceType;
-            _servicePathStorage = servicePathStorage;
+            _getServicePathPrefix = getServicePathPrefix;
         }
 
         public IHttpServiceCallBuilder AddInvocation(IInvocation invocation)
         {
+            //invocation
             _invocation = invocation;
-         
-            //TODO: separate build func
-            _requestBuilder = new DefaultRequestContentBuilder(_serviceType, invocation.Method);
-            _requestContent = _requestBuilder.BuildContent(_invocation.Arguments);
 
+            //token
+            var tokenObj = invocation.Arguments.FirstOrDefault(x => x is CancellationToken);
+            if (tokenObj == null) _cancellationToken = CancellationToken.None;
+            else _cancellationToken = (CancellationToken) tokenObj;
+
+            //content
+            var requestBuilder = new DefaultRequestContentBuilder(_serviceType, invocation.Method);
+            _requestContent = requestBuilder.BuildContent(_invocation.Arguments);
+
+            //next
             //TODO: get request meta (headers, method type, content type) from service interface type attributes
 
             return this;
@@ -54,25 +66,19 @@ namespace Core.Service.Host.ServiceDiscovery.Proxy.Http
         public async Task BuildAsync()
         {
             using (_requestContent)
-            {
-                await _dynamicProxy.CallAsync(await GetPath(), _requestContent);
-            }
+                await _dynamicProxy.CallAsync(await GetFullPath(), _requestContent, _cancellationToken);
         }
 
         public MethodInfo ProcessAsyncWithResultMethodInfo => HandleAsyncMethodInfo;
         private async Task<T> BuildAsyncWithResult<T>()
         {
             using (_requestContent)
-            {
-                return await _dynamicProxy.CallAsync<T>(await GetPath(), _requestContent);
-            }
+                return await _dynamicProxy.CallAsync<T>(await GetFullPath(), _requestContent, _cancellationToken);
         }
 
-        private async Task<string> GetPath()
+        private async Task<string> GetFullPath()
         {
-            var getPair = await _servicePathStorage.Get(_serviceType.FullName);
-
-            return $"{Encoding.UTF8.GetString(getPair.Response.Value, 0, getPair.Response.Value.Length)}/{_invocation.Method.Name}";
+            return $"{await _getServicePathPrefix(_serviceType, CancellationToken.None)}/{_invocation.Method.Name}";
         }
     }
 }

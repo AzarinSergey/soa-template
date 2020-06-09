@@ -1,5 +1,5 @@
-﻿using System;
-using Consul;
+﻿using Core.Service.Host.ServiceDiscovery.Interfaces;
+using Core.Service.Host.ServiceDiscovery.Provider;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,15 +7,14 @@ namespace Core.Service.Host.ServiceDiscovery
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddConsul(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddServiceDiscovery(this IServiceCollection services, IConfiguration configuration)
         {
-            var sectionKey = typeof(ServiceDiscoveryConfig).Name;
-            services.Configure<ServiceDiscoveryConfig>(configuration.GetSection(sectionKey));
-            services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig =>
-            {
-                var host = configuration[$"{sectionKey}:serviceDiscoveryAddress"];
-                consulConfig.Address = new Uri(host);
-            }));
+            var configSection = configuration.GetSection(typeof(ServiceDiscoveryConfig).Name).Get<ServiceDiscoveryConfig>();
+            var serviceDiscovery = new ServiceDiscoveryConsulProvider(configSection);
+
+            services.AddSingleton<IServiceDiscoveryProvider, ServiceDiscoveryConsulProvider>(p => serviceDiscovery);
+            services.AddSingleton<IServiceEndpointKeyConvention, ServiceDiscoveryConsulProvider>(p => serviceDiscovery);
+
             return services;
         }
     }

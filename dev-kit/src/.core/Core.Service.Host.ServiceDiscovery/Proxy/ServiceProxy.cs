@@ -1,10 +1,9 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Castle.DynamicProxy;
-using Consul;
+﻿using Castle.DynamicProxy;
 using Core.Service.Host.ServiceDiscovery.Interfaces;
 using Core.Service.Host.ServiceDiscovery.Proxy.Http;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Core.Service.Host.ServiceDiscovery.Proxy
 {
@@ -12,15 +11,15 @@ namespace Core.Service.Host.ServiceDiscovery.Proxy
     {
         private static string _reverseProxyAddress;
         private static IHttpClientFactory _httpClientFactory;
-        private static IConsulClient _serviceDiscoveryClient;
+        private static IServiceDiscoveryProvider _serviceDiscoveryProvider;
 
         private static bool _initialized;
 
-        public static void Initialization(string reverseProxyAddress, IHttpClientFactory factory, IConsulClient client)
+        public static void Initialization(string reverseProxyAddress, IHttpClientFactory factory, IServiceDiscoveryProvider serviceDiscoveryProvider)
         {
             _reverseProxyAddress = string.IsNullOrEmpty(reverseProxyAddress) ? throw new ArgumentNullException(nameof(reverseProxyAddress)) : reverseProxyAddress;
             _httpClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
-            _serviceDiscoveryClient = client ?? throw new ArgumentNullException(nameof(client));
+            _serviceDiscoveryProvider = serviceDiscoveryProvider ?? throw new ArgumentNullException(nameof(serviceDiscoveryProvider));
 
             _initialized = true;
         }
@@ -43,7 +42,7 @@ namespace Core.Service.Host.ServiceDiscovery.Proxy
             var callProcessor = new HttpServiceCallBuilder(
                 new HttpServiceDynamicInstance(httpClient),
                 serviceType,
-                _serviceDiscoveryClient.KV);
+                _serviceDiscoveryProvider.GetEndpointPrefix);
 
             return (TService)new ProxyGenerator().CreateInterfaceProxyWithoutTarget(
                 typeof(TService), new HttpInterfaceInterceptor(callProcessor));
