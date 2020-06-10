@@ -11,6 +11,7 @@ using System.Threading;
 using Core.Messages;
 using Core.Service.Host.ServiceDiscovery.DynamicProxy;
 using Core.Tool;
+using Svc.Contract.Service.Models;
 
 namespace Api.Test
 {

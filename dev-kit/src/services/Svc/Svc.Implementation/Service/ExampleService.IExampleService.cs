@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Core.Messages;
 using Core.Tool;
 using Svc.Contract.Service;
+using Svc.Contract.Service.Models;
 
 namespace Svc.Implementation.Service
 {

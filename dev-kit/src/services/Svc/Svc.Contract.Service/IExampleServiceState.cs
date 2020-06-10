@@ -1,9 +1,9 @@
 ﻿using Core.Messages;
 using Core.Service.Host.ServiceDiscovery.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Svc.Contract.Service.Models;
 
 namespace Svc.Contract.Service
 {
@@ -14,18 +14,5 @@ namespace Svc.Contract.Service
         Task<string> ProcessArrayOfByteArray(IReadOnlyCollection<byte[]> file, CrossContext ctx, CancellationToken token);
         Task<CrossContext> ProcessComplexModel(ComplexModel file, CrossContext ctx, CancellationToken token);
         Task<ComplexModel> GetComplexModel(CrossContext ctx, CancellationToken token);
-    }
-
-    public class ComplexModel
-    {
-        public List<byte[]> Files { get; set; }
-
-        public string Encoding { get; set; }
-
-        public IReadOnlyDictionary<DateTimeKind, DateTime> Dates { get; set; }
-
-        public EventResetMode? NullableEnumNull { get; set; }
-
-        public EventResetMode NullableEnumValue { get; set; }
     }
 }
