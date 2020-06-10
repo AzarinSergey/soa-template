@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,11 +10,13 @@ using System.Threading.Tasks;
 using Core.Service.Host.ServiceDiscovery;
 using Core.Service.Host.ServiceDiscovery.Interfaces;
 using Core.Tool;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Core.Service.Host
+namespace Core.Service.Host.ApplicationBuilderExtensions
 {
-    public static class ApplicationBuilderExtensions
+    public static class ServiceEndpointUsing
     {
         public static IApplicationBuilder UseServiceEndpoints(this IApplicationBuilder app, Type[] serviceTypes,
             ServiceDiscoveryConfig settings)

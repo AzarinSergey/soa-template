@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Swagger\**" />
+    <EmbeddedResource Remove="Swagger\**" />
+    <None Remove="Swagger\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- Reference ASP.NET Core 3 dependencies -->
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>

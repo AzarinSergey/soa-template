@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Example.Model
+﻿namespace Svc.Model
 {
     public class Class1
     {

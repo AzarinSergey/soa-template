@@ -1,13 +1,13 @@
-﻿using Core.Service.Host.ServiceDiscovery.Interfaces;
+﻿using System;
+using Core.Service.Host.ServiceDiscovery.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
 
-namespace Core.Service.Host.ServiceDiscovery
+namespace Core.Service.Host.ApplicationBuilderExtensions
 {
-    public static class ApplicationBuilderExtensions
+    public static class ServiceDiscoveryUsing
     {
         public static IApplicationBuilder UseServiceDiscovery(this IApplicationBuilder app,
             string healthCheckPath, Type[] serviceEndpointInterfaces)

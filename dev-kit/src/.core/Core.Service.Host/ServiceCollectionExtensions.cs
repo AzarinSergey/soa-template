@@ -1,9 +1,10 @@
-﻿using Core.Service.Host.ServiceDiscovery.Interfaces;
+﻿using Core.Service.Host.ServiceDiscovery;
+using Core.Service.Host.ServiceDiscovery.Interfaces;
 using Core.Service.Host.ServiceDiscovery.Provider;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Core.Service.Host.ServiceDiscovery
+namespace Core.Service.Host
 {
     public static class ServiceCollectionExtensions
     {
