@@ -10,9 +10,11 @@
   <ItemGroup>
     <PackageReference Include="Consul" Version="0.7.2.6" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.4.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\.core\Core.Service.Host.Swagger\Core.Service.Host.Swagger.csproj" />
     <ProjectReference Include="..\..\..\.core\Core.Service.Host\Core.Service.Host.csproj" />
     <ProjectReference Include="..\Svc.Contract.Service\Svc.Contract.Service.csproj" />
   </ItemGroup>
