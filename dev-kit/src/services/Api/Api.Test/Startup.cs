@@ -1,5 +1,4 @@
 using Core.Service.Host;
-using Core.Service.Host.ServiceDiscovery.Proxy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Core.Messages;
+using Core.Service.Host.ServiceDiscovery.DynamicProxy;
 using Core.Tool;
 
 namespace Api.Test

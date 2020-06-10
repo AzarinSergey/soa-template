@@ -27,7 +27,7 @@ namespace Core.Service.Host.ServiceDiscovery
             logger.LogInformation($"Heath check endpoint on $'{healthCheckPath}' ");
 
             serviceDiscoveryProvider.RegisterService(healthCheckPath);
-            serviceDiscoveryProvider.AddEndpointPrefixes(serviceEndpointInterfaces);
+            serviceDiscoveryProvider.AddEndpoints(serviceEndpointInterfaces);
 
             var lifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
             lifetime.ApplicationStopping.Register(() =>

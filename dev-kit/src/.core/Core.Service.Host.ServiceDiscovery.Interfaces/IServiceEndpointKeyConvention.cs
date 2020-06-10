@@ -4,8 +4,10 @@ namespace Core.Service.Host.ServiceDiscovery.Interfaces
 {
     public interface IServiceEndpointKeyConvention
     {
-        string GetServiceKey(Type serviceInterfaceType);
+        string GetServiceEndpointKey(Type serviceInterfaceType);
 
-        string GetServiceEndpointPathPrefix(string serviceName, Type serviceInterfaceType);
+        string GetServiceEndpointUri(string serviceName, Type serviceInterfaceType);
+
+        string GetServiceKey(Type type);
     }
 }

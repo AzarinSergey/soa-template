@@ -27,7 +27,7 @@ namespace Core.Service.Host
             foreach (var serviceType in serviceTypes)
             {
                 var instance = app.ApplicationServices.GetService(serviceType);
-                var servicePath = serviceKeyConvention.GetServiceEndpointPathPrefix(settings.ServiceName, serviceType);
+                var servicePath = serviceKeyConvention.GetServiceEndpointUri(settings.ServiceName, serviceType);
                 var methods = serviceType.GetMethods();
 
                 app.UseEndpoints(builder =>

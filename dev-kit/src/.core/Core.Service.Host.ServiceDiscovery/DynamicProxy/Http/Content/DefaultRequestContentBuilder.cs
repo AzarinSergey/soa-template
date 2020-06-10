@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using Core.Tool;
 
-namespace Core.Service.Host.ServiceDiscovery.Proxy.Http.Content
+namespace Core.Service.Host.ServiceDiscovery.DynamicProxy.Http.Content
 {
     //TODO: interface + factory
     internal class DefaultRequestContentBuilder

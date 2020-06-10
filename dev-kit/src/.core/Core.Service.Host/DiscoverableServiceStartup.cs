@@ -1,6 +1,5 @@
 ﻿using Core.Service.Host.ServiceDiscovery;
 using Core.Service.Host.ServiceDiscovery.Interfaces;
-using Core.Service.Host.ServiceDiscovery.Proxy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Net.Http;
+using Core.Service.Host.ServiceDiscovery.DynamicProxy;
 
 namespace Core.Service.Host
 {

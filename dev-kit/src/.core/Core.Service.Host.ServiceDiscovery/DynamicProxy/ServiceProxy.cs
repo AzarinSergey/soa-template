@@ -1,11 +1,11 @@
-﻿using Castle.DynamicProxy;
-using Core.Service.Host.ServiceDiscovery.Interfaces;
-using Core.Service.Host.ServiceDiscovery.Proxy.Http;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Castle.DynamicProxy;
+using Core.Service.Host.ServiceDiscovery.DynamicProxy.Http;
+using Core.Service.Host.ServiceDiscovery.Interfaces;
 
-namespace Core.Service.Host.ServiceDiscovery.Proxy
+namespace Core.Service.Host.ServiceDiscovery.DynamicProxy
 {
     public static class ServiceProxy
     {
@@ -42,7 +42,7 @@ namespace Core.Service.Host.ServiceDiscovery.Proxy
             var callProcessor = new HttpServiceCallBuilder(
                 new HttpServiceDynamicInstance(httpClient),
                 serviceType,
-                _serviceDiscoveryProvider.GetEndpointPrefix);
+                _serviceDiscoveryProvider.GetServiceEndpointUri);
 
             return (TService)new ProxyGenerator().CreateInterfaceProxyWithoutTarget(
                 typeof(TService), new HttpInterfaceInterceptor(callProcessor));

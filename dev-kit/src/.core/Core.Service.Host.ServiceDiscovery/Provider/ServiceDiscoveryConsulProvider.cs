@@ -64,13 +64,13 @@ namespace Core.Service.Host.ServiceDiscovery.Provider
             await _client.Agent.ServiceDeregister(_serviceId).ConfigureAwait(false);
         }
 
-        public Task AddEndpointPrefixes(Type[] contractInterfaces, CancellationToken token = default)
+        public Task AddEndpoints(Type[] contractInterfaces, CancellationToken token = default)
         {
             return Task.WhenAll(contractInterfaces
                 .Select(contractInterface =>
                 {
-                    var serviceKey = GetServiceKey(contractInterface);
-                    var serviceEndpointPrefixPath = GetServiceEndpointPathPrefix(_config.ServiceName, contractInterface);
+                    var serviceKey = GetServiceEndpointKey(contractInterface);
+                    var serviceEndpointPrefixPath = GetServiceEndpointUri(_config.ServiceName, contractInterface);
 
                     return _client.KV.Put(new KVPair(serviceKey)
                     {
@@ -79,9 +79,9 @@ namespace Core.Service.Host.ServiceDiscovery.Provider
                 }));
         }
 
-        public async Task<string> GetEndpointPrefix(Type contractInterface, CancellationToken token = default)
+        public async Task<string> GetServiceEndpointUri(Type contractInterface, CancellationToken token = default)
         {
-            var result = await _client.KV.Get(GetServiceKey(contractInterface), token)
+            var result = await _client.KV.Get(GetServiceEndpointKey(contractInterface), token)
                 .ConfigureAwait(false);
 
             return Encoding.UTF8.GetString(result.Response.Value);
@@ -90,20 +90,15 @@ namespace Core.Service.Host.ServiceDiscovery.Provider
         public Task RemoveEndpointPrefixes(Type[] contractInterfaces, CancellationToken token = default)
         {
             return Task.WhenAll(contractInterfaces
-                .Select(contractInterface => _client.KV.Delete(GetServiceKey(contractInterface), token)));
+                .Select(contractInterface => _client.KV.Delete(GetServiceEndpointKey(contractInterface), token)));
         }
 
-        //TODO: move implementation from this
-        public string GetServiceKey(Type serviceInterfaceType)
+        #region IServiceEndpointKeyConvention
+
+        //TODO: move implementation from this?
+        public string GetServiceEndpointKey(Type serviceInterfaceType)
         {
-            if (!serviceInterfaceType.IsInterface)
-                throw new ArgumentException($"Interface type only allowed to Consul KV registration.");
-
-            var versionAttribute =
-                (ContractApiVersionAttribute)Attribute.GetCustomAttribute(serviceInterfaceType, typeof(ContractApiVersionAttribute));
-
-            if(versionAttribute == null)
-                throw new CustomAttributeFormatException("'ContractApiVersionAttribute' - required for discovered attributes");
+            var versionAttribute = GetVersionAttribute(serviceInterfaceType);
 
             var serviceTypeName = serviceInterfaceType.Name.StartsWith("I")
                 ? new string(serviceInterfaceType.Name.Skip(1).ToArray())
@@ -112,7 +107,25 @@ namespace Core.Service.Host.ServiceDiscovery.Provider
             return $"{serviceTypeName}/v{versionAttribute.Full}";
         }
 
-        public string GetServiceEndpointPathPrefix(string serviceName, Type serviceInterfaceType)
+        public string GetServiceEndpointUri(string serviceName, Type serviceInterfaceType)
+        {
+            var versionAttribute = GetVersionAttribute(serviceInterfaceType);
+
+            var serviceTypeName = serviceInterfaceType.Name.StartsWith("I")
+                ? new string(serviceInterfaceType.Name.Skip(1).ToArray())
+                : serviceInterfaceType.Name;
+
+            return $"{serviceName}/{serviceTypeName}/v{versionAttribute.Major}";
+        }
+
+        public string GetServiceKey(Type serviceInterfaceType)
+        {
+            return serviceInterfaceType.Name.StartsWith("I")
+                ? new string(serviceInterfaceType.Name.Skip(1).ToArray())
+                : serviceInterfaceType.Name;
+        }
+
+        private ContractApiVersionAttribute GetVersionAttribute(Type serviceInterfaceType)
         {
             if (!serviceInterfaceType.IsInterface)
                 throw new ArgumentException($"Interface type only allowed to Consul KV registration.");
@@ -123,11 +136,9 @@ namespace Core.Service.Host.ServiceDiscovery.Provider
             if (versionAttribute == null)
                 throw new CustomAttributeFormatException("'ContractApiVersionAttribute' - required for discovered attributes");
 
-            var serviceTypeName = serviceInterfaceType.Name.StartsWith("I")
-                ? new string(serviceInterfaceType.Name.Skip(1).ToArray())
-                : serviceInterfaceType.Name;
-
-            return $"{serviceName}/{serviceTypeName}/v{versionAttribute.Major}";
+            return versionAttribute;
         }
+
+        #endregion
     }
 }
