@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using Core.Tool;
 
 namespace Core.Service.Host.ServiceDiscovery.Proxy.Http.Content
 {
@@ -27,7 +28,7 @@ namespace Core.Service.Host.ServiceDiscovery.Proxy.Http.Content
             for (int i = 0; i < arguments.Length; i++)
             {
                 var propertyName = parameters[i].Name;
-                var propertyValue = System.Text.Json.JsonSerializer.Serialize(arguments[i]);
+                var propertyValue = Tools.Json.Serializer.Serialize(arguments[i]);
 
                 stringBuilder.Append($"\"{propertyName}\":{propertyValue}");
                 stringBuilder.Append(",");

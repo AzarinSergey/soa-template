@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Tool;
 
 namespace Core.Service.Host.ServiceDiscovery.Proxy.Http
 {
@@ -33,7 +34,7 @@ namespace Core.Service.Host.ServiceDiscovery.Proxy.Http
 
             var result = await _client.SendAsync(request, token);
 
-            return System.Text.Json.JsonSerializer.Deserialize<T>(await result.Content.ReadAsStringAsync());
+            return Tools.Json.Serializer.Deserialize<T>(await result.Content.ReadAsStringAsync());
         }
     }
 }

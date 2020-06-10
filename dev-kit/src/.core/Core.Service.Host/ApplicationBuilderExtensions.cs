@@ -4,12 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Service.Host.ServiceDiscovery;
 using Core.Service.Host.ServiceDiscovery.Interfaces;
+using Core.Tool;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Service.Host
@@ -25,53 +27,55 @@ namespace Core.Service.Host
             foreach (var serviceType in serviceTypes)
             {
                 var instance = app.ApplicationServices.GetService(serviceType);
-                var serviceKey = serviceKeyConvention.GetServiceEndpointPathPrefix(settings.ServiceName, serviceType);
+                var servicePath = serviceKeyConvention.GetServiceEndpointPathPrefix(settings.ServiceName, serviceType);
                 var methods = serviceType.GetMethods();
 
                 app.UseEndpoints(builder =>
                 {
                     foreach (var methodInfo in methods)
                     {
-                        builder.MapPost($"{serviceKey}/{methodInfo.Name}", async context =>
-                        {
-                            var cancellationToken = context.RequestAborted;
-
-                            string jsonBody;
-
-                            using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8))
-                                jsonBody = await reader.ReadToEndAsync();
-
-                            var methodParams = methodInfo.GetParameters()
-                                .Where(x => x.ParameterType.FullName != typeof(CancellationToken).FullName)
-                                .ToArray();
-                            var requestParams = new object[methodParams.Length + 1];
-                            var requestParamsJson = JsonDocument.Parse(jsonBody);
-
-                            for (var i = 0; i < methodParams.Length; i++)
-                            {
-                                if (requestParamsJson.RootElement.TryGetProperty(methodParams[i].Name, out var element))
-                                {
-                                    requestParams[i] = JsonSerializer.Deserialize(element.GetRawText(), methodParams[i].ParameterType);
-                                }
-                                else
-                                {
-                                    throw new KeyNotFoundException($"Request parameter not found by name: '{methodParams[i].Name}' ");
-                                }
-                            }
-
-                            requestParams[^1] = cancellationToken;
-
-                            var task = (Task)methodInfo.Invoke(instance, requestParams);
-                            await task.ConfigureAwait(false);
-                            var resultProperty = task.GetType().GetProperty("Result");
-                            var resultValue = resultProperty?.GetValue(task);
-
-                            await context.Response.WriteAsync(JsonSerializer.Serialize(resultValue), cancellationToken);
-                        });
+                        builder.MapPost($"{servicePath}/{methodInfo.Name}", context => MapPost(context, methodInfo, instance));
                     }
                 });
             }
             return app;
+        }
+
+        private static async Task MapPost(HttpContext context, MethodInfo methodInfo, object instance)
+        {
+            var cancellationToken = context.RequestAborted;
+
+            string jsonBody;
+
+            using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8))
+                jsonBody = await reader.ReadToEndAsync();
+
+            var methodParams = methodInfo.GetParameters()
+                .Where(x => x.ParameterType.FullName != typeof(CancellationToken).FullName)
+                .ToArray();
+            var requestParams = new object[methodParams.Length + 1];
+            var requestParamsJson = JsonDocument.Parse(jsonBody);
+
+            for (var i = 0; i < methodParams.Length; i++)
+            {
+                if (requestParamsJson.RootElement.TryGetProperty(methodParams[i].Name, out var element))
+                {
+                    requestParams[i] = Tools.Json.Serializer.Deserialize(element.GetRawText(), methodParams[i].ParameterType);
+                }
+                else
+                {
+                    throw new KeyNotFoundException($"Request parameter not found by name: '{methodParams[i].Name}' ");
+                }
+            }
+
+            requestParams[^1] = cancellationToken;
+
+            var task = (Task)methodInfo.Invoke(instance, requestParams);
+            await task.ConfigureAwait(false);
+            var resultProperty = task.GetType().GetProperty("Result");
+            var resultValue = resultProperty?.GetValue(task);
+
+            await context.Response.WriteAsync(Tools.Json.Serializer.Serialize(resultValue), cancellationToken);
         }
     }
 }
