@@ -1,4 +1,4 @@
-namespace Svc.Implementation
+namespace Core.Messages
 {
     public class CrossContext
     {

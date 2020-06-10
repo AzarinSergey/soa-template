@@ -55,12 +55,12 @@ namespace Core.Service.Host
                     await context.Response.WriteAsync("===> OK <===");
                 });
             });
-
-            var serviceDiscoveryProvider = app.ApplicationServices.GetRequiredService<IServiceDiscoveryProvider>();
-            app.UseServiceDiscovery(serviceDiscoveryProvider, healthPath, ServiceContractTypes);
-            app.UseServiceEndpoints(ServiceContractTypes);
-
             var settings = Configuration.GetSection(typeof(ServiceDiscoveryConfig).Name).Get<ServiceDiscoveryConfig>();
+            var serviceDiscoveryProvider = app.ApplicationServices.GetRequiredService<IServiceDiscoveryProvider>();
+
+            app.UseServiceDiscovery(serviceDiscoveryProvider, healthPath, ServiceContractTypes);
+            app.UseServiceEndpoints(ServiceContractTypes, settings);
+
             ServiceProxy
                 .Initialization(settings.ReverseProxyAddress,
                     app.ApplicationServices.GetRequiredService<IHttpClientFactory>(),

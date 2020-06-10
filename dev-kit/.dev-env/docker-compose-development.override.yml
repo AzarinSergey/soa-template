@@ -16,11 +16,7 @@ services:
       - ServiceDiscoveryConfig__Tags__0=traefik.enable=true
       - ServiceDiscoveryConfig__Tags__1=traefik.tags=exposed
       - ServiceDiscoveryConfig__Tags__2=traefik.http.routers.${FULL_NAME}-api-test.rule=Host(`localhost`) && PathPrefix(`/${FULL_NAME}-api-test`)
-      - ServiceDiscoveryConfig__Tags__3=traefik.http.middlewares.${FULL_NAME}-api-test-stripprefix.stripprefix.prefixes=/${FULL_NAME}-api-test
-      - ServiceDiscoveryConfig__Tags__4=traefik.http.routers.${FULL_NAME}-api-test.middlewares=${FULL_NAME}-api-test-stripprefix@consulcatalog
       - ServiceDiscoveryConfig__Tags__5=traefik.http.routers.${FULL_NAME}-api-test-internal.rule=Host(`reverse-proxy`) && PathPrefix(`/${FULL_NAME}-api-test`)
-      - ServiceDiscoveryConfig__Tags__6=traefik.http.middlewares.${FULL_NAME}-api-test-internal-stripprefix.stripprefix.prefixes=/${FULL_NAME}-api-test
-      - ServiceDiscoveryConfig__Tags__7=traefik.http.routers.${FULL_NAME}-api-test-internal.middlewares=${FULL_NAME}-api-test-internal-stripprefix@consulcatalog
     ports:
       - "33301:80"
     networks:
@@ -37,11 +33,7 @@ services:
       - ServiceDiscoveryConfig__Tags__0=traefik.enable=true
       - ServiceDiscoveryConfig__Tags__1=traefik.tags=exposed
       - ServiceDiscoveryConfig__Tags__2=traefik.http.routers.${FULL_NAME}-svc.rule=Host(`localhost`) && PathPrefix(`/${FULL_NAME}-svc`)
-      - ServiceDiscoveryConfig__Tags__3=traefik.http.middlewares.${FULL_NAME}-svc-stripprefix.stripprefix.prefixes=/${FULL_NAME}-svc
-      - ServiceDiscoveryConfig__Tags__4=traefik.http.routers.${FULL_NAME}-svc.middlewares=${FULL_NAME}-svc-stripprefix@consulcatalog
       - ServiceDiscoveryConfig__Tags__5=traefik.http.routers.${FULL_NAME}-svc-internal.rule=Host(`reverse-proxy`) && PathPrefix(`/${FULL_NAME}-svc`)
-      - ServiceDiscoveryConfig__Tags__6=traefik.http.middlewares.${FULL_NAME}-svc-internal-stripprefix.stripprefix.prefixes=/${FULL_NAME}-svc
-      - ServiceDiscoveryConfig__Tags__7=traefik.http.routers.${FULL_NAME}-svc-internal.middlewares=${FULL_NAME}-svc-internal-stripprefix@consulcatalog
     ports:
       - "33300:80"
     networks:

@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Service.Host.ServiceDiscovery;
 using Core.Service.Host.ServiceDiscovery.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +16,8 @@ namespace Core.Service.Host
 {
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder UseServiceEndpoints(this IApplicationBuilder app, Type[] serviceTypes)
+        public static IApplicationBuilder UseServiceEndpoints(this IApplicationBuilder app, Type[] serviceTypes,
+            ServiceDiscoveryConfig settings)
         {
             var serviceKeyConvention =
                 app.ApplicationServices.GetRequiredService<IServiceEndpointKeyConvention>();
@@ -23,9 +25,7 @@ namespace Core.Service.Host
             foreach (var serviceType in serviceTypes)
             {
                 var instance = app.ApplicationServices.GetService(serviceType);
-
-                var serviceKey = serviceKeyConvention.GetServiceKey(serviceType);
-
+                var serviceKey = serviceKeyConvention.GetServiceEndpointPathPrefix(settings.ServiceName, serviceType);
                 var methods = serviceType.GetMethods();
 
                 app.UseEndpoints(builder =>

@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Svc.Contract.Service;
-using Svc.Implementation;
 using System;
+using Core.Messages;
 
 namespace Api.Test
 {

@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Core.Messages;
 using Svc.Contract.Service;
 
 namespace Svc.Implementation.Service
