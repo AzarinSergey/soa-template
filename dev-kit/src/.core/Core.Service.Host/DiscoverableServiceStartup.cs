@@ -58,15 +58,16 @@ namespace Core.Service.Host
             });
             var settings = Configuration.GetSection(typeof(ServiceDiscoveryConfig).Name).Get<ServiceDiscoveryConfig>();
             var serviceDiscoveryProvider = app.ApplicationServices.GetRequiredService<IServiceDiscoveryProvider>();
+            var serviceEndpointConvention = app.ApplicationServices.GetRequiredService<IServiceEndpointConvention>();
 
             app.UseServiceDiscovery(serviceDiscoveryProvider, healthPath, ServiceContractTypes);
-            app.UseServiceEndpoints(ServiceContractTypes, settings);
+            app.UseServiceEndpoints(ServiceContractTypes, settings, serviceEndpointConvention);
 
             ServiceProxy
                 .Initialization(settings.ReverseProxyAddress,
                     app.ApplicationServices.GetRequiredService<IHttpClientFactory>(),
-                    serviceDiscoveryProvider);
-
+                    serviceDiscoveryProvider,
+                    serviceEndpointConvention);
 
             ServiceConfiguration(app, env);
         }

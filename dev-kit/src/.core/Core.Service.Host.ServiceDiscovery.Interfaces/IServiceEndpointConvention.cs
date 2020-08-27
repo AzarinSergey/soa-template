@@ -2,7 +2,7 @@
 
 namespace Core.Service.Host.ServiceDiscovery.Interfaces
 {
-    public interface IServiceEndpointKeyConvention
+    public interface IServiceEndpointConvention
     {
         string GetServiceEndpointKey(Type serviceInterfaceType);
 

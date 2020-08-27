@@ -23,6 +23,6 @@ prefix = "traefik"
 
 [providers.consulCatalog.endpoint]
 
-address = "consul-server-get-start:8500"
+address = "exp-consul-server:8500"
 scheme = "http"
 endpointWaitTime = "15s"

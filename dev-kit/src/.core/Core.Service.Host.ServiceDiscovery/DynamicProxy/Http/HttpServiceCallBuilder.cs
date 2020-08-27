@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Castle.DynamicProxy;
 using Core.Service.Host.ServiceDiscovery.DynamicProxy.Http.Content;
+using Core.Service.Host.ServiceDiscovery.Interfaces;
 
 namespace Core.Service.Host.ServiceDiscovery.DynamicProxy.Http
 {
@@ -24,7 +25,7 @@ namespace Core.Service.Host.ServiceDiscovery.DynamicProxy.Http
         private static readonly MethodInfo HandleAsyncMethodInfo = typeof(HttpServiceCallBuilder)
             .GetMethod("BuildAsyncWithResult", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        private readonly Func<Type, CancellationToken, Task<string>> _getServicePathPrefix;
+        private readonly IServiceDiscoveryProvider _discoveryService;
         private readonly IHttpServiceDynamicInstance _dynamicProxy;
         private readonly Type _serviceType;
         private IInvocation _invocation;
@@ -36,11 +37,11 @@ namespace Core.Service.Host.ServiceDiscovery.DynamicProxy.Http
         public HttpServiceCallBuilder(
             IHttpServiceDynamicInstance dynamicProxy,
             Type serviceType,
-            Func<Type, CancellationToken, Task<string>> getServicePathPrefix)
+            IServiceDiscoveryProvider discoveryService)
         {
             _dynamicProxy = dynamicProxy;
             _serviceType = serviceType;
-            _getServicePathPrefix = getServicePathPrefix;
+            _discoveryService = discoveryService;
         }
 
         public IHttpServiceCallBuilder AddInvocation(IInvocation invocation)
@@ -78,7 +79,7 @@ namespace Core.Service.Host.ServiceDiscovery.DynamicProxy.Http
 
         private async Task<string> GetFullPath()
         {
-            return $"{await _getServicePathPrefix(_serviceType, CancellationToken.None)}/{_invocation.Method.Name}";
+            return $"{await _discoveryService.GetServiceEndpointUri(_serviceType, CancellationToken.None)}/{_invocation.Method.Name}";
         }
     }
 }

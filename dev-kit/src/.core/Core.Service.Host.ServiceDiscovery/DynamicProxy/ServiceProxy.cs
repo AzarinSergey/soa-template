@@ -14,12 +14,18 @@ namespace Core.Service.Host.ServiceDiscovery.DynamicProxy
         private static IServiceDiscoveryProvider _serviceDiscoveryProvider;
 
         private static bool _initialized;
+        private static IServiceEndpointConvention _convention;
 
-        public static void Initialization(string reverseProxyAddress, IHttpClientFactory factory, IServiceDiscoveryProvider serviceDiscoveryProvider)
+        public static void Initialization(
+            string reverseProxyAddress,
+            IHttpClientFactory factory,
+            IServiceDiscoveryProvider serviceDiscoveryProvider,
+            IServiceEndpointConvention convention)
         {
             _reverseProxyAddress = string.IsNullOrEmpty(reverseProxyAddress) ? throw new ArgumentNullException(nameof(reverseProxyAddress)) : reverseProxyAddress;
             _httpClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
             _serviceDiscoveryProvider = serviceDiscoveryProvider ?? throw new ArgumentNullException(nameof(serviceDiscoveryProvider));
+            _convention = convention ?? throw new ArgumentNullException(nameof(convention));
 
             _initialized = true;
         }
@@ -32,8 +38,8 @@ namespace Core.Service.Host.ServiceDiscovery.DynamicProxy
                     typeof(ServiceProxy).FullName, 
                     new NullReferenceException("Initialization method must be called."));
 
-            var serviceType = typeof(TService);
-            if (!serviceType.IsInterface)
+            var serviceInterfaceType = typeof(TService);
+            if (!serviceInterfaceType.IsInterface)
                 throw new ArgumentException($"'TService' - interface type only allowed.");
 
             var httpClient = _httpClientFactory.CreateClient();
@@ -41,8 +47,8 @@ namespace Core.Service.Host.ServiceDiscovery.DynamicProxy
 
             var callProcessor = new HttpServiceCallBuilder(
                 new HttpServiceDynamicInstance(httpClient),
-                serviceType,
-                _serviceDiscoveryProvider.GetServiceEndpointUri);
+                serviceInterfaceType,
+                _serviceDiscoveryProvider);
 
             return (TService)new ProxyGenerator().CreateInterfaceProxyWithoutTarget(
                 typeof(TService), new HttpInterfaceInterceptor(callProcessor));

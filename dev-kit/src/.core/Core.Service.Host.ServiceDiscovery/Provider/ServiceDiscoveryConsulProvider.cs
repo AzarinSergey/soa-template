@@ -12,25 +12,25 @@ using System.Threading.Tasks;
 
 namespace Core.Service.Host.ServiceDiscovery.Provider
 {
-    public class ServiceDiscoveryConsulProvider : IServiceDiscoveryProvider, IServiceEndpointKeyConvention
+    public class ServiceDiscoveryConsulProvider : IServiceDiscoveryProvider, IServiceEndpointConvention
     {
-        private readonly ServiceDiscoveryConfig _config;
+        private readonly ServiceDiscoveryConfig _currentServiceConfig;
         private readonly ConsulClient _client;
 
-        private readonly Uri _serviceUri;
-        private readonly string _serviceId;
+        private readonly Uri _currentServiceUri;
+        private readonly string _currentServiceId;
 
         public ServiceDiscoveryConsulProvider(ServiceDiscoveryConfig config)
         {
-            _config = config ?? throw new ArgumentException(nameof(config));
+            _currentServiceConfig = config ?? throw new ArgumentException(nameof(config));
 
             _client = new ConsulClient(consulConfig =>
             {
                 consulConfig.Address = new Uri(config.ServiceDiscoveryAddress);
             });
 
-            _serviceUri = new Uri(_config.ServiceAddress);
-            _serviceId = $"{_config.ServiceId}-{_serviceUri.Port}";
+            _currentServiceUri = new Uri(_currentServiceConfig.ServiceAddress);
+            _currentServiceId = $"{_currentServiceConfig.ServiceId}-{_currentServiceUri.Port}";
         }
 
 
@@ -41,16 +41,16 @@ namespace Core.Service.Host.ServiceDiscovery.Provider
 
             var registrationModel = new AgentServiceRegistration
             {
-                ID = _serviceId,
-                Name = _config.ServiceName,
+                ID = _currentServiceId,
+                Name = _currentServiceConfig.ServiceName,
                 Address = dnsIpAddress,
-                Port = _serviceUri.Port,
-                Tags = _config.Tags,
+                Port = _currentServiceUri.Port,
+                Tags = _currentServiceConfig.Tags,
                 Check = new AgentServiceCheck
                 {
                     Timeout = TimeSpan.FromSeconds(3),
                     Interval = TimeSpan.FromSeconds(10),
-                    HTTP = $"{_serviceUri.Scheme}://{dnsIpAddress}:{_serviceUri.Port}{healthCheckPath}",
+                    HTTP = $"{_currentServiceUri.Scheme}://{dnsIpAddress}:{_currentServiceUri.Port}{healthCheckPath}",
                     Status = HealthStatus.Critical
                 }
             };
@@ -61,7 +61,7 @@ namespace Core.Service.Host.ServiceDiscovery.Provider
 
         public async Task UnregisterService(CancellationToken token = default)
         {
-            await _client.Agent.ServiceDeregister(_serviceId).ConfigureAwait(false);
+            await _client.Agent.ServiceDeregister(_currentServiceId).ConfigureAwait(false);
         }
 
         public Task AddEndpoints(Type[] contractInterfaces, CancellationToken token = default)
@@ -70,7 +70,7 @@ namespace Core.Service.Host.ServiceDiscovery.Provider
                 .Select(contractInterface =>
                 {
                     var serviceKey = GetServiceEndpointKey(contractInterface);
-                    var serviceEndpointPrefixPath = GetServiceEndpointUri(_config.ServiceName, contractInterface);
+                    var serviceEndpointPrefixPath = GetServiceEndpointUri(_currentServiceConfig.ServiceName, contractInterface);
 
                     return _client.KV.Put(new KVPair(serviceKey)
                     {
@@ -104,7 +104,7 @@ namespace Core.Service.Host.ServiceDiscovery.Provider
                 ? new string(serviceInterfaceType.Name.Skip(1).ToArray())
                 : serviceInterfaceType.Name;
 
-            return $"{serviceTypeName}/v{versionAttribute.Full}";
+            return $"{serviceTypeName}/v{versionAttribute.Full}/endpoint";
         }
 
         public string GetServiceEndpointUri(string serviceName, Type serviceInterfaceType)
@@ -134,7 +134,7 @@ namespace Core.Service.Host.ServiceDiscovery.Provider
                 (ContractApiVersionAttribute)Attribute.GetCustomAttribute(serviceInterfaceType, typeof(ContractApiVersionAttribute));
 
             if (versionAttribute == null)
-                throw new CustomAttributeFormatException("'ContractApiVersionAttribute' - required for discovered attributes");
+                return new ContractApiVersionAttribute(0, 0, "version-not-specified");
 
             return versionAttribute;
         }

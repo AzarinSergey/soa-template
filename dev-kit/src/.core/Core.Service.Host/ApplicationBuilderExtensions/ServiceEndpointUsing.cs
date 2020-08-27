@@ -18,16 +18,14 @@ namespace Core.Service.Host.ApplicationBuilderExtensions
 {
     public static class ServiceEndpointUsing
     {
-        public static IApplicationBuilder UseServiceEndpoints(this IApplicationBuilder app, Type[] serviceTypes,
-            ServiceDiscoveryConfig settings)
-        {
-            var serviceKeyConvention =
-                app.ApplicationServices.GetRequiredService<IServiceEndpointKeyConvention>();
 
+        public static IApplicationBuilder UseServiceEndpoints(this IApplicationBuilder app, Type[] serviceTypes,
+            ServiceDiscoveryConfig settings, IServiceEndpointConvention serviceEndpointConvention)
+        {
             foreach (var serviceType in serviceTypes)
             {
                 var instance = app.ApplicationServices.GetService(serviceType);
-                var servicePath = serviceKeyConvention.GetServiceEndpointUri(settings.ServiceName, serviceType);
+                var servicePath = serviceEndpointConvention.GetServiceEndpointUri(settings.ServiceName, serviceType);
                 var methods = serviceType.GetMethods();
 
                 app.UseEndpoints(builder =>
@@ -40,6 +38,11 @@ namespace Core.Service.Host.ApplicationBuilderExtensions
             }
             return app;
         }
+
+        public static IApplicationBuilder UseServiceEndpoints(this IApplicationBuilder app, Type[] serviceTypes,
+            ServiceDiscoveryConfig settings)
+            =>    UseServiceEndpoints(app, serviceTypes, settings,
+                app.ApplicationServices.GetRequiredService<IServiceEndpointConvention>());
 
         private static async Task MapPost(HttpContext context, MethodInfo methodInfo, object instance)
         {

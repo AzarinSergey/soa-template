@@ -14,7 +14,7 @@ namespace Core.Service.Host
             var serviceDiscovery = new ServiceDiscoveryConsulProvider(configSection);
 
             services.AddSingleton<IServiceDiscoveryProvider, ServiceDiscoveryConsulProvider>(p => serviceDiscovery);
-            services.AddSingleton<IServiceEndpointKeyConvention, ServiceDiscoveryConsulProvider>(p => serviceDiscovery);
+            services.AddSingleton<IServiceEndpointConvention, ServiceDiscoveryConsulProvider>(p => serviceDiscovery);
 
             return services;
         }
