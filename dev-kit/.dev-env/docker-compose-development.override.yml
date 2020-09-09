@@ -1,54 +1,27 @@
 version: '3.4'
 
-networks:
-  exp-appname:
-    driver: bridge
-
 services:
   api-test:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ServiceDiscoveryConfig__ReverseProxyAddress=${REVERSE_PROXY_ADDRESS}
-      - ServiceDiscoveryConfig__ServiceName=${FULL_NAME}-api-test
-      - ServiceDiscoveryConfig__ServiceID=${FULL_NAME}-api-test
-      - ServiceDiscoveryConfig__ServiceAddress=http://${FULL_NAME}-api-test:80
-      - ServiceDiscoveryConfig__ServiceDiscoveryAddress=http://exp-consul-server:8500
-      - ServiceDiscoveryConfig__Tags__0=traefik.enable=true
-      - ServiceDiscoveryConfig__Tags__1=traefik.tags=exposed
-      - ServiceDiscoveryConfig__Tags__2=traefik.http.routers.${FULL_NAME}-api-test.rule=Host(`localhost`) && PathPrefix(`/${FULL_NAME}-api-test`)
-      - ServiceDiscoveryConfig__Tags__5=traefik.http.routers.${FULL_NAME}-api-test-internal.rule=Host(`exp-reverse-proxy`) && PathPrefix(`/${FULL_NAME}-api-test`)
+    container_name: ${APP_NAME}.api-test
     ports:
       - "33301:80"
     networks:
-      - exp-appname
+      exp-appname:
 
-  svc:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ServiceDiscoveryConfig__ReverseProxyAddress=${REVERSE_PROXY_ADDRESS}
-      - ServiceDiscoveryConfig__ServiceName=${FULL_NAME}-svc
-      - ServiceDiscoveryConfig__ServiceID=${FULL_NAME}-svc
-      - ServiceDiscoveryConfig__ServiceAddress=http://${FULL_NAME}-svc:80
-      - ServiceDiscoveryConfig__ServiceDiscoveryAddress=http://exp-consul-server:8500
-      - ServiceDiscoveryConfig__Tags__0=traefik.enable=true
-      - ServiceDiscoveryConfig__Tags__1=traefik.tags=exposed
-      - ServiceDiscoveryConfig__Tags__2=traefik.http.routers.${FULL_NAME}-svc.rule=Host(`localhost`) && PathPrefix(`/${FULL_NAME}-svc`)
-      - ServiceDiscoveryConfig__Tags__5=traefik.http.routers.${FULL_NAME}-svc-internal.rule=Host(`exp-reverse-proxy`) && PathPrefix(`/${FULL_NAME}-svc`)
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ApplicationConfig__ApplicationName=${APP_NAME}
+      - ServiceConfig__ServiceName=api-test
+
+  backend-example:
+    container_name: ${APP_NAME}.backend-example
     ports:
       - "33300:80"
     networks:
-      - exp-appname
-
-  consul-server:
-    ports:
-      - "8500:8500"
-    networks:
       exp-appname:
 
-  reverse-proxy:
-    ports:
-      - "33398:8080"
-      - "33399:5001"
-    networks:
-      exp-appname:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ApplicationConfig__ApplicationName=${APP_NAME}
+      - ServiceConfig__ServiceName=backend-example
 

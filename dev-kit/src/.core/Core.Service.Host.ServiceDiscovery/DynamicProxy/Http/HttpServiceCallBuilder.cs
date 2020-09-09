@@ -1,50 +1,41 @@
-﻿using System;
+﻿using Castle.DynamicProxy;
+using Core.Service.Host.ServiceDiscovery.DynamicProxy.Http.Content;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Castle.DynamicProxy;
-using Core.Service.Host.ServiceDiscovery.DynamicProxy.Http.Content;
 using Core.Service.Host.ServiceDiscovery.Interfaces;
 
 namespace Core.Service.Host.ServiceDiscovery.DynamicProxy.Http
 {
-    internal interface IInvocationBuilder
+    internal interface IHttpServiceCallBuilder
     {
-        IHttpServiceCallBuilder AddInvocation(IInvocation invocation);
-    }
-    internal interface IHttpServiceCallBuilder : IInvocationBuilder
-    {
-        MethodInfo ProcessAsyncWithResultMethodInfo { get; }
-        Task BuildAsync();
+        IHttpServiceCallBuilder BuildFor(IInvocation invocation);
+        Task CallAsync();
+        object CallAsyncWithResult();
     }
 
     internal class HttpServiceCallBuilder : IHttpServiceCallBuilder
     {
-        private static readonly MethodInfo HandleAsyncMethodInfo = typeof(HttpServiceCallBuilder)
-            .GetMethod("BuildAsyncWithResult", BindingFlags.Instance | BindingFlags.NonPublic);
-
-        private readonly IServiceDiscoveryProvider _discoveryService;
         private readonly IHttpServiceDynamicInstance _dynamicProxy;
         private readonly Type _serviceType;
+        private readonly IServiceEndpointConvention _serviceEndpointConvention;
         private IInvocation _invocation;
 
         private HttpContent _requestContent;
         private CancellationToken _cancellationToken;
 
-
-        public HttpServiceCallBuilder(
-            IHttpServiceDynamicInstance dynamicProxy,
-            Type serviceType,
-            IServiceDiscoveryProvider discoveryService)
+        public HttpServiceCallBuilder(IHttpServiceDynamicInstance dynamicProxy,
+            Type serviceType, IServiceEndpointConvention serviceEndpointConvention)
         {
             _dynamicProxy = dynamicProxy;
             _serviceType = serviceType;
-            _discoveryService = discoveryService;
+            _serviceEndpointConvention = serviceEndpointConvention;
         }
 
-        public IHttpServiceCallBuilder AddInvocation(IInvocation invocation)
+        public IHttpServiceCallBuilder BuildFor(IInvocation invocation)
         {
             //invocation
             _invocation = invocation;
@@ -64,22 +55,32 @@ namespace Core.Service.Host.ServiceDiscovery.DynamicProxy.Http
             return this;
         }
 
-        public async Task BuildAsync()
+        #region Call
+
+        public async Task CallAsync()
         {
             using (_requestContent)
-                await _dynamicProxy.CallAsync(await GetFullPath(), _requestContent, _cancellationToken);
+                await _dynamicProxy.CallAsync(
+                    _serviceEndpointConvention.GetServiceMethodPath(_invocation.Method, _serviceType), _requestContent, _cancellationToken);
         }
 
-        public MethodInfo ProcessAsyncWithResultMethodInfo => HandleAsyncMethodInfo;
+        public object CallAsyncWithResult()
+        {
+            var resultType = _invocation.Method.ReturnType.GetGenericArguments()[0];
+            var mi = ProcessAsyncWithResultMethodInfo.MakeGenericMethod(resultType);
+
+            return mi.Invoke(this, null);
+        }
+
+        private static readonly MethodInfo HandleAsyncMethodInfo = typeof(HttpServiceCallBuilder)
+            .GetMethod("BuildAsyncWithResult", BindingFlags.Instance | BindingFlags.NonPublic);
+        private MethodInfo ProcessAsyncWithResultMethodInfo => HandleAsyncMethodInfo;
         private async Task<T> BuildAsyncWithResult<T>()
         {
             using (_requestContent)
-                return await _dynamicProxy.CallAsync<T>(await GetFullPath(), _requestContent, _cancellationToken);
+                return await _dynamicProxy.CallAsync<T>(_serviceEndpointConvention.GetServiceMethodPath(_invocation.Method, _serviceType), _requestContent, _cancellationToken);
         }
 
-        private async Task<string> GetFullPath()
-        {
-            return $"{await _discoveryService.GetServiceEndpointUri(_serviceType, CancellationToken.None)}/{_invocation.Method.Name}";
-        }
+        #endregion
     }
 }

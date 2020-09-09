@@ -1,27 +1,36 @@
+using Cmn.Constants;
+using Core.Messages;
 using Core.Service.Host;
+using Core.Service.Host.ServiceDiscovery;
+using Core.Service.Host.ServiceDiscovery.DynamicProxy;
+using Core.Service.Host.ServiceDiscovery.Interfaces;
+using Core.Tool;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Svc.Contract.Service;
+using Svc.Contract.Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using Core.Messages;
-using Core.Service.Host.ServiceDiscovery.DynamicProxy;
-using Core.Tool;
-using Svc.Contract.Service.Models;
 
 namespace Api.Test
 {
-    public class Startup : DiscoverableServiceStartup
+    public class Startup : StatelessServiceStartup
     {
         protected override Type[] ServiceContractTypes => Array.Empty<Type>();
 
-        public override void AddServices(IServiceCollection services)
+        public override void RegisterStatelessService(IServiceCollection services)
         {
-
+            services.AddHttpClient<ServiceProxy<IExampleServiceState>>((provider, client) =>
+            {
+                var cfg = provider.GetRequiredService<IOptions<ApplicationConfig>>().Value;
+                var convention = provider.GetRequiredService<IServiceEndpointConvention>();
+                client.BaseAddress = new Uri($"http://{convention.GetServiceHost(cfg, ServiceNames.BackendExample)}");
+            });
         }
 
         public override void ServiceConfiguration(IApplicationBuilder app, IWebHostEnvironment env)
@@ -31,7 +40,7 @@ namespace Api.Test
             {
                 endpoints.MapGet("/all", async context =>
                 {
-                    var proxy = ServiceProxy.Create<IExampleServiceState>();
+                    var proxy = app.ApplicationServices.GetService<ServiceProxy<IExampleServiceState>>();
 
                     var reportBuilder = new StringBuilder();
 
@@ -40,7 +49,7 @@ namespace Api.Test
                             Encoding.UTF8.GetBytes("Trolololol, ===> FILE CONTENT <===== kjdfnjk"),
                             new CrossContext { Uuid = Guid.NewGuid().ToString() }
                         );
-                    var result1 = await proxy.ProcessByteArray(request1.Item1, request1.Item2, context.RequestAborted);
+                    var result1 = await proxy.Call().ProcessByteArray(request1.Item1, request1.Item2, context.RequestAborted);
 
 
 
@@ -53,7 +62,7 @@ namespace Api.Test
                         },
                         new CrossContext { Uuid = Guid.NewGuid().ToString() }
                     );
-                    var result2 = await proxy.ProcessArrayOfByteArray(request2.Item1, request1.Item2, context.RequestAborted);
+                    var result2 = await proxy.Call().ProcessArrayOfByteArray(request2.Item1, request1.Item2, context.RequestAborted);
                     FormatResponse(reportBuilder, request2, result2);
                     reportBuilder.AppendLine("\t\t*******************************\t\t***********************************");
 
@@ -64,7 +73,7 @@ namespace Api.Test
                     var request3 = (
                         new CrossContext { Uuid = Guid.NewGuid().ToString() }
                     );
-                    var result3 = await proxy.GetComplexModel(request1.Item2, context.RequestAborted);
+                    var result3 = await proxy.Call().GetComplexModel(request1.Item2, context.RequestAborted);
                     FormatResponse(reportBuilder, request3, result3);
                     reportBuilder.AppendLine("\t\t*******************************\t\t***********************************");
 
@@ -91,7 +100,7 @@ namespace Api.Test
                         },
                         new CrossContext { Uuid = Guid.NewGuid().ToString() }
                     );
-                    var result4 = await proxy.ProcessComplexModel(request4.Item1, request4.Item2, context.RequestAborted);
+                    var result4 = await proxy.Call().ProcessComplexModel(request4.Item1, request4.Item2, context.RequestAborted);
                     FormatResponse(reportBuilder, request4, result4);
                     reportBuilder.AppendLine("\t\t*******************************\t\t***********************************");
 

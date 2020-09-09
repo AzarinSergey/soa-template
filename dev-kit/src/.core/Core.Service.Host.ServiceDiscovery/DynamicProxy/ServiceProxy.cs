@@ -1,57 +1,40 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Castle.DynamicProxy;
+﻿using Castle.DynamicProxy;
 using Core.Service.Host.ServiceDiscovery.DynamicProxy.Http;
 using Core.Service.Host.ServiceDiscovery.Interfaces;
+using Microsoft.Extensions.Options;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Core.Service.Host.ServiceDiscovery.DynamicProxy
 {
-    public static class ServiceProxy
+    public class ServiceProxy<T>
+        where T : IInternalHttpService
     {
-        private static string _reverseProxyAddress;
-        private static IHttpClientFactory _httpClientFactory;
-        private static IServiceDiscoveryProvider _serviceDiscoveryProvider;
+        private readonly IServiceEndpointConvention _endpointConvention;
+        private readonly HttpClient _client;
 
-        private static bool _initialized;
-        private static IServiceEndpointConvention _convention;
-
-        public static void Initialization(
-            string reverseProxyAddress,
-            IHttpClientFactory factory,
-            IServiceDiscoveryProvider serviceDiscoveryProvider,
-            IServiceEndpointConvention convention)
+        public ServiceProxy(IServiceEndpointConvention endpointConvention, HttpClient client)
         {
-            _reverseProxyAddress = string.IsNullOrEmpty(reverseProxyAddress) ? throw new ArgumentNullException(nameof(reverseProxyAddress)) : reverseProxyAddress;
-            _httpClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
-            _serviceDiscoveryProvider = serviceDiscoveryProvider ?? throw new ArgumentNullException(nameof(serviceDiscoveryProvider));
-            _convention = convention ?? throw new ArgumentNullException(nameof(convention));
-
-            _initialized = true;
+            _endpointConvention = endpointConvention;
+            _client = client;
         }
 
-        public static TService Create<TService>()
-            where TService : IDiscoverableHttpService
+        public T Call()
         {
-            if(!_initialized)
-                throw new TypeInitializationException(
-                    typeof(ServiceProxy).FullName, 
-                    new NullReferenceException("Initialization method must be called."));
-
-            var serviceInterfaceType = typeof(TService);
+            var serviceInterfaceType = typeof(T);
             if (!serviceInterfaceType.IsInterface)
                 throw new ArgumentException($"'TService' - interface type only allowed.");
 
-            var httpClient = _httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri(_reverseProxyAddress);
+            var httpServiceDynamicInstance = new HttpServiceDynamicInstance(_client);
 
-            var callProcessor = new HttpServiceCallBuilder(
-                new HttpServiceDynamicInstance(httpClient),
+            var httpCallBuilder = new HttpServiceCallBuilder(
+                httpServiceDynamicInstance,
                 serviceInterfaceType,
-                _serviceDiscoveryProvider);
+                _endpointConvention);
 
-            return (TService)new ProxyGenerator().CreateInterfaceProxyWithoutTarget(
-                typeof(TService), new HttpInterfaceInterceptor(callProcessor));
+            return (T)new ProxyGenerator().CreateInterfaceProxyWithoutTarget(
+                typeof(T), new HttpInterfaceInterceptor(httpCallBuilder));
         }
 
         private class HttpInterfaceInterceptor : IInterceptor
@@ -66,23 +49,24 @@ namespace Core.Service.Host.ServiceDiscovery.DynamicProxy
             public void Intercept(IInvocation invocation)
             {
                 var returnType = invocation.Method.ReturnType;
-                _builder.AddInvocation(invocation);
+
+                _builder.BuildFor(invocation);
+
                 if (returnType == typeof(Task))
                 {
-                    invocation.ReturnValue = _builder.BuildAsync();
+                    invocation.ReturnValue = _builder.CallAsync();
                     return;
                 }
 
                 if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(Task<>))
                 {
-                    var resultType = invocation.Method.ReturnType.GetGenericArguments()[0];
-                    var mi = _builder.ProcessAsyncWithResultMethodInfo.MakeGenericMethod(resultType);
-                    invocation.ReturnValue = mi.Invoke(_builder, null);
+                    invocation.ReturnValue = _builder.CallAsyncWithResult();
                     return;
                 }
 
                 throw new NotSupportedException($"Return type '{returnType}' of method '{invocation.Method.Name}' not supported. 'Task' and 'Task<>' types are supported only.");
             }
         }
+
     }
 }

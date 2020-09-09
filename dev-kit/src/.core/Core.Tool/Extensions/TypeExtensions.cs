@@ -10,8 +10,6 @@ namespace Core.Tool.Extensions
 {
     public static class TypeExtensions
     {
-
-
         /// <summary>
         /// Returns true if it is a dynamic object
         /// </summary>

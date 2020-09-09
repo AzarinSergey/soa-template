@@ -1,4 +1,5 @@
 ﻿using Core.Service.Host.ApplicationBuilderExtensions;
+using Core.Service.Host.ServiceDiscovery;
 using Core.Service.Host.ServiceDiscovery.DynamicProxy;
 using Core.Service.Host.ServiceDiscovery.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -9,15 +10,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Net.Http;
-using Core.Service.Host.ServiceDiscovery;
+using Microsoft.Extensions.Options;
 
 namespace Core.Service.Host
 {
-    public abstract class DiscoverableServiceStartup
+    public abstract class StatelessServiceStartup
     {
         protected abstract Type[] ServiceContractTypes { get; }
 
-        protected DiscoverableServiceStartup()
+        protected StatelessServiceStartup()
         {
             var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -33,9 +34,13 @@ namespace Core.Service.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddServiceDiscovery(Configuration);
             services.AddHttpClient();
-            AddServices(services);
+            services.AddSingleton<IServiceEndpointConvention, ServiceEndpointConvention>();
+
+            services.Configure<ServiceConfig>(Configuration.GetSection(ServiceConfig.SectionName));
+            services.Configure<ApplicationConfig>(Configuration.GetSection(ApplicationConfig.SectionName));
+
+            RegisterStatelessService(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -56,24 +61,17 @@ namespace Core.Service.Host
                     await context.Response.WriteAsync("===> OK <===");
                 });
             });
-            var settings = Configuration.GetSection(typeof(ServiceDiscoveryConfig).Name).Get<ServiceDiscoveryConfig>();
-            var serviceDiscoveryProvider = app.ApplicationServices.GetRequiredService<IServiceDiscoveryProvider>();
+
+            var settings = app.ApplicationServices.GetRequiredService<IOptions<ServiceConfig>>().Value;
             var serviceEndpointConvention = app.ApplicationServices.GetRequiredService<IServiceEndpointConvention>();
 
-            app.UseServiceDiscovery(serviceDiscoveryProvider, healthPath, ServiceContractTypes);
-            app.UseServiceEndpoints(ServiceContractTypes, settings, serviceEndpointConvention);
-
-            ServiceProxy
-                .Initialization(settings.ReverseProxyAddress,
-                    app.ApplicationServices.GetRequiredService<IHttpClientFactory>(),
-                    serviceDiscoveryProvider,
-                    serviceEndpointConvention);
+            app.UseServiceEndpoints(ServiceContractTypes, serviceEndpointConvention);
 
             ServiceConfiguration(app, env);
         }
 
 
-        public abstract void AddServices(IServiceCollection c);
+        public abstract void RegisterStatelessService(IServiceCollection c);
         public abstract void ServiceConfiguration(IApplicationBuilder app, IWebHostEnvironment env);
     }
 }

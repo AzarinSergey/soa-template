@@ -12,7 +12,7 @@ namespace Core.Service.Host.ServiceDiscovery.DynamicProxy.Http
     }
 
     //TODO: handle non success responses
-    internal class HttpServiceDynamicInstance : IHttpServiceDynamicInstance
+    public class HttpServiceDynamicInstance : IHttpServiceDynamicInstance
     {
         private readonly HttpClient _client;
 
@@ -23,14 +23,20 @@ namespace Core.Service.Host.ServiceDiscovery.DynamicProxy.Http
 
         public async Task CallAsync(string path, HttpContent content, CancellationToken token)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Post, path) { Content = content };
-
+            using var request = new HttpRequestMessage(HttpMethod.Post, path)
+            {
+                Content = content
+            };
+            
             await _client.SendAsync(request, token);
         }
 
         public async Task<T> CallAsync<T>(string path, HttpContent content, CancellationToken token)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Post, path) { Content = content };
+            using var request = new HttpRequestMessage(HttpMethod.Post, path)
+            {
+                Content = content
+            };
 
             var result = await _client.SendAsync(request, token);
 

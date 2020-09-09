@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\.cmn\Cmn.Constants\Cmn.Constants.csproj" />
     <ProjectReference Include="..\..\..\.core\Core.Service.Host\Core.Service.Host.csproj" />
     <ProjectReference Include="..\..\..\.core\Core.Tool\Core.Tool.csproj" />
     <ProjectReference Include="..\..\Svc\Svc.Contract.Service\Svc.Contract.Service.csproj" />
