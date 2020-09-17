@@ -6,7 +6,7 @@ networks:
 
 services:
   api-test:
-    image: ${DOCKER_REGISTRY}/api-test:${APP_VERSION}
+    image: ${DOCKER_REGISTRY}/${APP_NAME}.api-test:${APP_VERSION}
     build:
       context: ../
       dockerfile: src/services/Api/Api.Test/${Configuration}.Dockerfile
@@ -15,7 +15,7 @@ services:
         - app.name=${APP_NAME}
 
   exs:
-    image: ${DOCKER_REGISTRY}/exs:${APP_VERSION}
+    image: ${DOCKER_REGISTRY}/${APP_NAME}.exs:${APP_VERSION}
     build:
       context: ../
       dockerfile: src/services/Exs/Exs.Implementation/${Configuration}.Dockerfile
