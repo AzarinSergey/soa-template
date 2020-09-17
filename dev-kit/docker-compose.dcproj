@@ -10,22 +10,20 @@
     </PropertyGroup>
     <Exec Command="powershell.exe $(PsScenarioFile) $(AppVariablesFilePath) '$(MsBuildVariables)' $(OutputDirectory)" />
   </Target>
-
   <PropertyGroup Label="Globals">
-	<ProjectVersion>2.1</ProjectVersion>
-	<DockerTargetOS>Linux</DockerTargetOS>
-	<ProjectGuid>b8e8ed8c-4bd2-4375-b28b-597f1c844a70</ProjectGuid>
-	<DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-	<DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
-	<DockerComposeBaseFilePath>.dev-env/docker-compose-development</DockerComposeBaseFilePath>
-	<DockerComposeBuildArguments>--no-cache</DockerComposeBuildArguments>
+    <ProjectVersion>2.1</ProjectVersion>
+    <DockerTargetOS>Linux</DockerTargetOS>
+    <ProjectGuid>b8e8ed8c-4bd2-4375-b28b-597f1c844a70</ProjectGuid>
+    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
+    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
+    <DockerComposeBaseFilePath>.dev-env/docker-compose-development</DockerComposeBaseFilePath>
   </PropertyGroup>
-
   <ItemGroup>
     <None Include=".dev-env\docker-compose.env" />
     <None Include=".dev-env\kube\kube-api-deployment-development.yml" />
     <None Include=".dev-env\docker-compose-development.override.yml" />
     <None Include=".dev-env\docker-compose-development.yml" />
+    <None Include="build\PushImages.ps1" />
     <None Include="build\PassingMsBuildEnvironmentToDockerCompose.ps1" />
   </ItemGroup>
 </Project>

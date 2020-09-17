@@ -11,10 +11,10 @@ COPY ["src/services/Api/Api.Test/Api.Test.csproj", "src/services/Api/Api.Test/"]
 RUN dotnet restore "src/services/Api/Api.Test/Api.Test.csproj"
 COPY . .
 WORKDIR "/src/src/services/Api/Api.Test"
-RUN dotnet build "Api.Test.csproj" -c ${Configuration} -o /app/build
+RUN dotnet build "Api.Test.csproj" -c Debug -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Api.Test.csproj" -c ${Configuration} -o /app/publish
+RUN dotnet publish "Api.Test.csproj" -c Debug -o /app/publish
 
 FROM base AS final
 WORKDIR /app
