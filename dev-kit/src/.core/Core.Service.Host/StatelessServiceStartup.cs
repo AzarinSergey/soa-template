@@ -1,16 +1,15 @@
 ﻿using Core.Service.Host.ApplicationBuilderExtensions;
-using Core.Service.Host.ServiceDiscovery;
-using Core.Service.Host.ServiceDiscovery.DynamicProxy;
-using Core.Service.Host.ServiceDiscovery.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Net.Http;
 using Microsoft.Extensions.Options;
+using System;
+using Core.Service.Host.Client;
+using Core.Service.Host.Convention.Configuration;
+using Core.Service.Host.Convention.Convention;
 
 namespace Core.Service.Host
 {
@@ -62,7 +61,6 @@ namespace Core.Service.Host
                 });
             });
 
-            var settings = app.ApplicationServices.GetRequiredService<IOptions<ServiceConfig>>().Value;
             var serviceEndpointConvention = app.ApplicationServices.GetRequiredService<IServiceEndpointConvention>();
 
             app.UseServiceEndpoints(ServiceContractTypes, serviceEndpointConvention);

@@ -13,8 +13,8 @@ services:
       - ApplicationConfig__ApplicationName=${APP_NAME}
       - ServiceConfig__ServiceName=api-test
 
-  backend-example:
-    container_name: ${APP_NAME}.backend-example
+  exs:
+    container_name: ${APP_NAME}.exs
     ports:
       - "33300:80"
     networks:
@@ -23,5 +23,5 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ApplicationConfig__ApplicationName=${APP_NAME}
-      - ServiceConfig__ServiceName=backend-example
+      - ServiceConfig__ServiceName=exs
 

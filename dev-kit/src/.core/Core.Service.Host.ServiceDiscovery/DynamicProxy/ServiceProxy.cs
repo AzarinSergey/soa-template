@@ -1,12 +1,12 @@
-﻿using Castle.DynamicProxy;
-using Core.Service.Host.ServiceDiscovery.DynamicProxy.Http;
-using Core.Service.Host.ServiceDiscovery.Interfaces;
-using Microsoft.Extensions.Options;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Castle.DynamicProxy;
+using Core.Service.Host.Client.DynamicProxy.Http;
+using Core.Service.Host.Convention.Convention;
+using Core.Service.Interfaces;
 
-namespace Core.Service.Host.ServiceDiscovery.DynamicProxy
+namespace Core.Service.Host.Client.DynamicProxy
 {
     public class ServiceProxy<T>
         where T : IInternalHttpService

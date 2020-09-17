@@ -1,7 +1,7 @@
 ﻿using Core.Messages;
 using Core.Tool;
-using Svc.Contract.Service;
-using Svc.Contract.Service.Models;
+using Exs.Contract.Service;
+using Exs.Contract.Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Svc.Implementation.Service
+namespace Exs.Implementation.Service
 {
     public partial class ExampleService : IExampleServiceState
     {

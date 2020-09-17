@@ -1,4 +1,4 @@
-﻿namespace Svc.Domain
+﻿namespace Exs.Domain
 {
     public class Class1
     {

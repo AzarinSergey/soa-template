@@ -6,20 +6,18 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
+
 COPY ["src/services/Api/Api.Test/Api.Test.csproj", "src/services/Api/Api.Test/"]
 RUN dotnet restore "src/services/Api/Api.Test/Api.Test.csproj"
 COPY . .
 WORKDIR "/src/src/services/Api/Api.Test"
-RUN dotnet build "Api.Test.csproj" -c Release -o /app/build
+RUN dotnet build "Api.Test.csproj" -c ${Configuration} -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Api.Test.csproj" -c Release -o /app/publish
+RUN dotnet publish "Api.Test.csproj" -c ${Configuration} -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-LABEL service.name=api-test
-LABEL service.version=0.0.1
 
 ENTRYPOINT ["dotnet", "Api.Test.dll"]

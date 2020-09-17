@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Svc.Contract.Service.Models
+namespace Exs.Contract.Service.Models
 {
     public class ComplexModel
     {

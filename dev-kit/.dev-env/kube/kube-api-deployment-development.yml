@@ -1,0 +1,38 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: api-test
+spec:
+  type: NodePort
+  selector:
+    app: api-test
+  ports:
+    - protocol: TCP
+      nodePort: 30001
+      port: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-test-deployment
+  labels:
+    app: api-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-test
+  template:
+    metadata:
+      labels:
+        app: api-test
+    spec:
+      containers:
+      - name: api-test
+        image: dev/api-test:dev
+        ports:
+        - containerPort: 80
+#        resources:
+#          limits:
+#            cpu: "300m"
+#            memory: "128Mi"

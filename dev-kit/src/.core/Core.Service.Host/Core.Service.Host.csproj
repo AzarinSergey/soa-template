@@ -16,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.Service.Host.ServiceDiscovery\Core.Service.Host.ServiceDiscovery.csproj" />
+    <ProjectReference Include="..\Core.Service.Host.Convention\Core.Service.Host.Convention.csproj" />
+    <ProjectReference Include="..\Core.Service.Host.ServiceDiscovery\Core.Service.Host.Client.csproj" />
     <ProjectReference Include="..\Core.Tool\Core.Tool.csproj" />
   </ItemGroup>
 

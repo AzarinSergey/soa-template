@@ -1,21 +1,19 @@
 using Cmn.Constants;
 using Core.Messages;
 using Core.Service.Host;
-using Core.Service.Host.ServiceDiscovery;
-using Core.Service.Host.ServiceDiscovery.DynamicProxy;
-using Core.Service.Host.ServiceDiscovery.Interfaces;
+using Core.Service.Host.Client.DynamicProxy;
+using Core.Service.Host.Client.ServiceCollectionExtensions;
 using Core.Tool;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Svc.Contract.Service;
-using Svc.Contract.Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using Exs.Contract.Service;
+using Exs.Contract.Service.Models;
 
 namespace Api.Test
 {
@@ -25,12 +23,7 @@ namespace Api.Test
 
         public override void RegisterStatelessService(IServiceCollection services)
         {
-            services.AddHttpClient<ServiceProxy<IExampleServiceState>>((provider, client) =>
-            {
-                var cfg = provider.GetRequiredService<IOptions<ApplicationConfig>>().Value;
-                var convention = provider.GetRequiredService<IServiceEndpointConvention>();
-                client.BaseAddress = new Uri($"http://{convention.GetServiceHost(cfg, ServiceNames.BackendExample)}");
-            });
+            services.RegisterInternalServiceProxy<IExampleServiceState>(ServiceNames.BackendExample);
         }
 
         public override void ServiceConfiguration(IApplicationBuilder app, IWebHostEnvironment env)

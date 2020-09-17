@@ -2,6 +2,6 @@
 {
     public class ServiceNames
     {
-        public const string BackendExample = "backend-example";
+        public const string BackendExample = "exs";
     }
 }

@@ -1,17 +1,17 @@
-﻿using Core.Service.Host.ServiceDiscovery;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Service.Host;
+using Core.Service.Host.Convention.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
-namespace Svc.Implementation.Service
+namespace Exs.Implementation.Service
 {
     public partial class ExampleService : StatelessService
     {
         public ILogger<ExampleService> Logger;
-
+         
         public ExampleService(IOptions<ServiceConfig> config, ILogger<ExampleService> logger)
         : base(config.Value)
         {

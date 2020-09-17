@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\.core\Core.Messages\Core.Messages.csproj" />
-    <ProjectReference Include="..\..\..\.core\Core.Service.Host.ServiceDiscovery.Interfaces\Core.Service.Host.ServiceDiscovery.Interfaces.csproj" />
+    <ProjectReference Include="..\..\..\.core\Core.Service.Host.ServiceDiscovery.Interfaces\Core.Service.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

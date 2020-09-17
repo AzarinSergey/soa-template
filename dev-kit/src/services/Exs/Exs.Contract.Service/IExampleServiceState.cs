@@ -1,12 +1,11 @@
 ﻿using Core.Messages;
-using Core.Service.Host.ServiceDiscovery.Interfaces;
+using Core.Service.Interfaces;
+using Exs.Contract.Service.Models;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Threading;
 using System.Threading.Tasks;
-using Svc.Contract.Service.Models;
 
-namespace Svc.Contract.Service
+namespace Exs.Contract.Service
 {
     public interface IExampleServiceState : IInternalHttpService
     {

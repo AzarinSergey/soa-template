@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Tool;
 
-namespace Core.Service.Host.ServiceDiscovery.DynamicProxy.Http
+namespace Core.Service.Host.Client.DynamicProxy.Http
 {
     internal interface IHttpServiceDynamicInstance
     {

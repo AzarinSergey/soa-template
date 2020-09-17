@@ -1,13 +1,14 @@
 using Core.Service.Host;
+using Core.Service.Host.ServiceCollectionExtensions;
+using Exs.Contract.Service;
+using Exs.Implementation.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Svc.Contract.Service;
-using Svc.Implementation.Service;
 using System;
 
-namespace Svc.Implementation
+namespace Exs.Implementation
 {
     public class Startup : StatelessServiceStartup
     {
@@ -18,9 +19,9 @@ namespace Svc.Implementation
 
         public override void RegisterStatelessService(IServiceCollection c)
         {
-            c.AddSingleton<IExampleServiceState, ExampleService>();
-            c.AddSingleton<ExampleService>();
-            c.AddHostedService(provider => provider.GetService<ExampleService>());
+            c.RegisterStatelessServices()
+                .AddHttpService<ExampleService, IExampleServiceState>()
+                .AddBackgroundService<ExampleService>();
         }
 
         public override void ServiceConfiguration(IApplicationBuilder app, IWebHostEnvironment env)

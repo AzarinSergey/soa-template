@@ -8,17 +8,17 @@ services:
   api-test:
     image: ${DOCKER_REGISTRY}/api-test
     build:
-      context: .
-      dockerfile: ../src/services/Api/Api.Test/Dockerfile
+      context: ../
+      dockerfile: src/services/Api/Api.Test/Dockerfile
       labels:
         - app.logo=${LOGO}
         - app.name=${APP_NAME}
 
-  backend-example:
-    image: ${DOCKER_REGISTRY}/backend-example
+  exs:
+    image: ${DOCKER_REGISTRY}/exs
     build:
-      context: .
-      dockerfile: ../src/services/Svc/Svc.Implementation/Dockerfile
+      context: ../
+      dockerfile: src/services/Exs/Exs.Implementation/Dockerfile
       labels:
         - app.logo=${LOGO}
-        - app.name=${APP_NAME}
+        - app.name=${APP_NAME} 

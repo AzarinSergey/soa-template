@@ -1,14 +1,14 @@
-﻿using Castle.DynamicProxy;
-using Core.Service.Host.ServiceDiscovery.DynamicProxy.Http.Content;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Service.Host.ServiceDiscovery.Interfaces;
+using Castle.DynamicProxy;
+using Core.Service.Host.Client.DynamicProxy.Http.Content;
+using Core.Service.Host.Convention.Convention;
 
-namespace Core.Service.Host.ServiceDiscovery.DynamicProxy.Http
+namespace Core.Service.Host.Client.DynamicProxy.Http
 {
     internal interface IHttpServiceCallBuilder
     {

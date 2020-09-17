@@ -1,4 +1,4 @@
-﻿namespace Core.Service.Host.ServiceDiscovery.Interfaces
+﻿namespace Core.Service.Interfaces
 {
     public interface IInternalHttpService
     {

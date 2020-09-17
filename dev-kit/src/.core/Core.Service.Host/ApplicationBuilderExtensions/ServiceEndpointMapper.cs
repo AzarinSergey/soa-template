@@ -1,5 +1,4 @@
-﻿using Core.Service.Host.ServiceDiscovery;
-using Core.Service.Host.ServiceDiscovery.Interfaces;
+﻿using Core.Service.Host.Convention.Convention;
 using Core.Tool;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

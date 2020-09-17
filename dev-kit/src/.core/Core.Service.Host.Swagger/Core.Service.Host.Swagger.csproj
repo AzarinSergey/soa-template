@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.Service.Host.ServiceDiscovery.Interfaces\Core.Service.Host.ServiceDiscovery.Interfaces.csproj" />
+    <ProjectReference Include="..\Core.Service.Host.ServiceDiscovery.Interfaces\Core.Service.Interfaces.csproj" />
     <ProjectReference Include="..\Core.Tool\Core.Tool.csproj" />
   </ItemGroup>
 
