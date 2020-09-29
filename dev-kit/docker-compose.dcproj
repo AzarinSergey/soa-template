@@ -20,7 +20,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include=".dev-env\docker-compose.env" />
-    <None Include=".dev-env\kube\kube-api-deployment-development.yml" />
+    <None Include=".dev-env\kube\deployments.yml" />
     <None Include=".dev-env\docker-compose-development.override.yml" />
     <None Include=".dev-env\docker-compose-development.yml" />
     <None Include="build\PushImages.ps1" />
