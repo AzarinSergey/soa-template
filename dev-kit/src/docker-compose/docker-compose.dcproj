@@ -3,9 +3,9 @@
   <Target Name="PrepareEvironment">
     <Message Importance="High" Text="PrepareEvironment" />
     <PropertyGroup>
-      <PsScenarioFile>$(SolutionDir)build\PassingMsBuildEnvironmentToDockerCompose.ps1</PsScenarioFile>
-      <AppVariablesFilePath>$(SolutionDir).dev-env\docker-compose.env</AppVariablesFilePath>
-      <OutputDirectory>$(SolutionDir)</OutputDirectory>
+      <PsScenarioFile>$(SolutionDir)scripts\PassingMsBuildEnvironmentToDockerCompose.ps1</PsScenarioFile>
+      <AppVariablesFilePath>$(SolutionDir)src\docker-compose\.dev.env</AppVariablesFilePath>
+      <OutputDirectory>$(SolutionDir)src\docker-compose\</OutputDirectory>
       <MsBuildVariables>SolutionDir=$(SolutionDir),Configuration=$(Configuration)</MsBuildVariables>
     </PropertyGroup>
     <Exec Command="powershell.exe $(PsScenarioFile) $(AppVariablesFilePath) '$(MsBuildVariables)' $(OutputDirectory)" />
@@ -16,14 +16,15 @@
     <ProjectGuid>b8e8ed8c-4bd2-4375-b28b-597f1c844a70</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
-    <DockerComposeBaseFilePath>.dev-env/docker-compose-development</DockerComposeBaseFilePath>
+    <DockerComposeBaseFilePath>docker-compose</DockerComposeBaseFilePath>
+    <AdditionalComposeFilePaths>docker-compose.dev.yml;docker-compose-app.yml</AdditionalComposeFilePaths>
   </PropertyGroup>
   <ItemGroup>
-    <None Include=".dev-env\docker-compose.env" />
-    <None Include=".dev-env\kube\deployments.yml" />
-    <None Include=".dev-env\docker-compose-development.override.yml" />
-    <None Include=".dev-env\docker-compose-development.yml" />
-    <None Include="build\PushImages.ps1" />
-    <None Include="build\PassingMsBuildEnvironmentToDockerCompose.ps1" />
+    <None Include=".dev.env" />
+    <None Include="docker-compose-app.yml" />
+    <None Include="docker-compose.dev.yml">
+      <DependentUpon>docker-compose.yml</DependentUpon>
+    </None>
+    <None Include="docker-compose.yml" />
   </ItemGroup>
 </Project>

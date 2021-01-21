@@ -1,15 +1,13 @@
 ﻿using Core.Service.Host.ApplicationBuilderExtensions;
+using Core.Service.Host.Convention.Configuration;
+using Core.Service.Host.Convention.Convention;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using System;
-using Core.Service.Host.Client;
-using Core.Service.Host.Convention.Configuration;
-using Core.Service.Host.Convention.Convention;
 
 namespace Core.Service.Host
 {
@@ -39,6 +37,7 @@ namespace Core.Service.Host
             services.Configure<ServiceConfig>(Configuration.GetSection(ServiceConfig.SectionName));
             services.Configure<ApplicationConfig>(Configuration.GetSection(ApplicationConfig.SectionName));
 
+            services.AddControllers();
             RegisterStatelessService(services);
         }
 
@@ -55,6 +54,8 @@ namespace Core.Service.Host
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
+
                 endpoints.MapGet(healthPath, async context =>
                 {
                     await context.Response.WriteAsync("===> OK <===");

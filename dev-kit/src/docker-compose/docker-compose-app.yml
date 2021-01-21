@@ -1,0 +1,42 @@
+version: '3.4'
+
+networks:
+  exp-appname:
+    driver: bridge
+
+services:
+  api-test:
+    container_name: ${APP_NAME}.api-test
+    image: ${DOCKER_REGISTRY}/${APP_NAME}.api-test:${APP_VERSION}
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ApplicationConfig__ApplicationName=${APP_NAME}
+      - ServiceConfig__ServiceName=api-test
+    build:
+      context: ../../
+      dockerfile: src/services/Api/Api.Test/${Configuration}.Dockerfile
+      labels:
+        - app.logo=${LOGO}
+        - app.name=${APP_NAME}
+    ports:
+      - "33301:80"
+    networks:
+      exp-appname:
+
+  exs:
+    container_name: ${APP_NAME}.exs
+    image: ${DOCKER_REGISTRY}/${APP_NAME}.exs:${APP_VERSION}
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ApplicationConfig__ApplicationName=${APP_NAME}
+      - ServiceConfig__ServiceName=exs
+    build:
+      context: ../../
+      dockerfile: src/services/Exs/Exs.Implementation/${Configuration}.Dockerfile
+      labels:
+        - app.logo=${LOGO}
+        - app.name=${APP_NAME} 
+    ports:
+      - "33300:80"
+    networks:
+      exp-appname:
