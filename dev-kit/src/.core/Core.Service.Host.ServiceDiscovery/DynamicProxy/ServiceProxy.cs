@@ -64,7 +64,7 @@ namespace Core.Service.Host.Client.DynamicProxy
                     return;
                 }
 
-                throw new NotSupportedException($"Return type '{returnType}' of method '{invocation.Method.Name}' not supported. 'Task' and 'Task<>' types are supported only.");
+                throw new NotSupportedException($"Return type '{returnType}' of method '{invocation.Method.Name}' not supported. 'Task' and 'Task<>' types are supporting only.");
             }
         }
 

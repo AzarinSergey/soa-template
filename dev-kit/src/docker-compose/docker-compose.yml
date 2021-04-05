@@ -1,1 +1,14 @@
 version: '3.4'
+
+services:
+  pg-sql:
+    container_name: ${APP_NAME}.pg-sql
+    image: postgres
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ApplicationConfig__ApplicationName=${APP_NAME}
+      - ServiceConfig__ServiceName=pg-sql
+    ports:
+      - "5432:5432"
+    networks:
+      exp-appname:
