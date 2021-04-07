@@ -39,27 +39,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exs.Implementation", "src\s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exs.Model", "src\services\Exs\Exs.Model\Exs.Model.csproj", "{DC624F21-BBB9-411B-8B5D-CDDCD38D4769}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "src\docker-compose\docker-compose.dcproj", "{B8E8ED8C-4BD2-4375-B28B-597F1C844A70}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".scripts", ".scripts", "{2176FACC-BE52-4AD4-A22D-BA4F247A8510}"
-	ProjectSection(SolutionItems) = preProject
-		scripts\PassingMsBuildEnvironmentToDockerCompose.ps1 = scripts\PassingMsBuildEnvironmentToDockerCompose.ps1
-		scripts\PushImages.ps1 = scripts\PushImages.ps1
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Orm.Ef", "src\.core\Core.Orm.Ef\Core.Orm.Ef.csproj", "{DA9E6A81-7580-4807-9392-92DD10AC0F8C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blg", "Blg", "{1300B31A-D360-4B48-8F13-D60F24BD6074}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blg.Domain", "src\services\Blg\Blg.Domain\Blg.Domain.csproj", "{36B8D684-DF22-49AE-A57A-9D6425C1CBFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blg.Domain", "src\services\Blg\Blg.Domain\Blg.Domain.csproj", "{36B8D684-DF22-49AE-A57A-9D6425C1CBFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blg.Implementation", "src\services\Blg\Blg.Implementation\Blg.Implementation.csproj", "{71071FE7-F14D-4C5F-A79B-DDBF1C19881E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blg.Implementation", "src\services\Blg\Blg.Implementation\Blg.Implementation.csproj", "{71071FE7-F14D-4C5F-A79B-DDBF1C19881E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blg.Model", "src\services\Blg\Blg.Model\Blg.Model.csproj", "{DE921969-6089-447C-BF94-C9FE0347B348}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blg.Contract.Messages", "src\services\Blg\Blg.Contract.Messages\Blg.Contract.Messages.csproj", "{71036F48-E6BE-4A90-A6CB-AD770C95A64C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blg.Contract.Messages", "src\services\Blg\Blg.Contract.Messages\Blg.Contract.Messages.csproj", "{71036F48-E6BE-4A90-A6CB-AD770C95A64C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blg.Contract.Service", "src\services\Blg\Blg.Contract.Service\Blg.Contract.Service.csproj", "{9C242E83-E18F-4C34-865E-35A42F04822F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blg.Contract.Service", "src\services\Blg\Blg.Contract.Service\Blg.Contract.Service.csproj", "{9C242E83-E18F-4C34-865E-35A42F04822F}"
+EndProject
+Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "build", "build\build.pssproj", "{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,10 +117,6 @@ Global
 		{DC624F21-BBB9-411B-8B5D-CDDCD38D4769}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC624F21-BBB9-411B-8B5D-CDDCD38D4769}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC624F21-BBB9-411B-8B5D-CDDCD38D4769}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8E8ED8C-4BD2-4375-B28B-597F1C844A70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8E8ED8C-4BD2-4375-B28B-597F1C844A70}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8E8ED8C-4BD2-4375-B28B-597F1C844A70}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8E8ED8C-4BD2-4375-B28B-597F1C844A70}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA9E6A81-7580-4807-9392-92DD10AC0F8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA9E6A81-7580-4807-9392-92DD10AC0F8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA9E6A81-7580-4807-9392-92DD10AC0F8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -151,6 +141,10 @@ Global
 		{9C242E83-E18F-4C34-865E-35A42F04822F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C242E83-E18F-4C34-865E-35A42F04822F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C242E83-E18F-4C34-865E-35A42F04822F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

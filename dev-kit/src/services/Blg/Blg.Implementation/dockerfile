@@ -1,0 +1,6 @@
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim
+COPY ["bin/Debug/netcoreapp3.1", "app/"]
+
+EXPOSE 80
+
+ENTRYPOINT ["dotnet", "app/Blg.Implementation.dll"]

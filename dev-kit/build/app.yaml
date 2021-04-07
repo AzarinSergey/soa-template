@@ -1,0 +1,21 @@
+app:
+  name: dev-kit
+
+  services:
+  - name: api-test
+    registry: soa-template
+    tag: develop
+    dockerfileDir: src\services\Api\Api.Test
+    helmDir: deploy\local\apitest
+
+  - name: blg
+    registry: soa-template
+    tag: develop
+    dockerfileDir: src\services\Blg\Blg.Implementation
+    helmDir: deploy\local\blg
+
+  - name: exs
+    registry: soa-template
+    tag: develop
+    dockerfileDir: src\services\Exs\Exs.Implementation
+    helmDir: deploy\local\exs
