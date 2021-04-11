@@ -17,7 +17,7 @@ namespace Core.Service.Host.Client.ServiceCollectionExtensions
             {
                 var cfg = provider.GetRequiredService<IOptions<ApplicationConfig>>().Value;
                 var convention = provider.GetRequiredService<IServiceEndpointConvention>();
-                client.BaseAddress = new Uri($"http://{convention.GetServiceHost(cfg, serviceName)}");
+                client.BaseAddress = new Uri($"http://{serviceName}:");
             });
         }
     }

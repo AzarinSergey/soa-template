@@ -30,7 +30,8 @@
       "publishAllPorts": true
     },
     "Bridge to Kubernetes": {
-      "commandName": "AzureDevSpacesLocal"
+      "commandName": "AzureDevSpacesLocal",
+      "launchBrowser": true
     }
   }
 }

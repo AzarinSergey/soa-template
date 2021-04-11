@@ -50,20 +50,23 @@ namespace Core.Service.Host.ApplicationBuilderExtensions
             var methodParams = methodInfo.GetParameters();
             var requestParams = new object[methodParams.Length];
 
-            var requestParamsJson = JsonDocument.Parse(jsonBody);
-
-            for (var i = 0; i < methodParams.Length; i++)
+            if (!string.IsNullOrEmpty(jsonBody))
             {
-                if (methodParams[i].ParameterType.FullName == typeof(CancellationToken).FullName)
-                    continue;
+                var requestParamsJson = JsonDocument.Parse(jsonBody);
 
-                if (requestParamsJson.RootElement.TryGetProperty(methodParams[i].Name, out var element))
+                for (var i = 0; i < methodParams.Length; i++)
                 {
-                    requestParams[i] = Tools.Json.Serializer.Deserialize(element.GetRawText(), methodParams[i].ParameterType);
-                }
-                else
-                {
-                    throw new KeyNotFoundException($"Request parameter not found by name: '{methodParams[i].Name}' ");
+                    if (methodParams[i].ParameterType.FullName == typeof(CancellationToken).FullName)
+                        continue;
+
+                    if (requestParamsJson.RootElement.TryGetProperty(methodParams[i].Name, out var element))
+                    {
+                        requestParams[i] = Tools.Json.Serializer.Deserialize(element.GetRawText(), methodParams[i].ParameterType);
+                    }
+                    else
+                    {
+                        throw new KeyNotFoundException($"Request parameter not found by name: '{methodParams[i].Name}' ");
+                    }
                 }
             }
 

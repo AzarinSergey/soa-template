@@ -31,8 +31,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.yaml" />
+    <Content Include="ReadMe.md" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="kill_local_cluster.ps1" />
+    <Compile Include="run_local_cluster - Copy.ps1" />
     <Compile Include="run_local_cluster.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

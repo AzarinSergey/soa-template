@@ -58,7 +58,7 @@ namespace Core.Service.Host
 
                 endpoints.MapGet(healthPath, async context =>
                 {
-                    await context.Response.WriteAsync("===> OK <===");
+                    await context.Response.WriteAsync($"===> OK <=== \n {Tool.Tools.Json.Serializer.Serialize(context.Request.Headers)}");
                 });
             });
 

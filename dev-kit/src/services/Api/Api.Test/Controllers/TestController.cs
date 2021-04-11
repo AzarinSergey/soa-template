@@ -4,6 +4,7 @@ using Exs.Contract.Service;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +22,26 @@ namespace Api.Test.Controllers
             _proxy = serviceProxy;
         }
 
+        [HttpGet("ping")]
+        public async Task<IActionResult> Ping(CancellationToken token)
+        {
+            var result = await _proxy.Call().Ping(token);
+            return Ok(result);
+        }
+
+        [HttpGet("pingd")]
+        public async Task<IActionResult> Pingd(CancellationToken token)
+        {
+            using var client = new HttpClient
+            {
+                BaseAddress = new Uri("http://exs")
+            };
+
+            var response = await client.PostAsync("/exampleservicestate/ping", null, token);
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
         [HttpGet("all")]
         public async Task<IActionResult> All(CancellationToken token)
         {
@@ -31,6 +52,7 @@ namespace Api.Test.Controllers
                     Encoding.UTF8.GetBytes("Trolololol, ===> FILE CONTENT <===== kjdfnjk"),
                     new CrossContext { Uuid = Guid.NewGuid().ToString() }
                 );
+            
             var result1 = await _proxy.Call().ProcessByteArray(request1.Item1, request1.Item2, token);
 
 
