@@ -1,0 +1,9 @@
+{
+  "commands": {
+    "upgrade_service": {
+      "fileName": "powershell.exe",
+      "workingDirectory": ".",
+      "arguments": "-ExecutionPolicy Bypass -NonInteractive -File build\\upgrade_service.ps1"
+    }
+  }
+}

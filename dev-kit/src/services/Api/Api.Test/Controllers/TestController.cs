@@ -22,11 +22,23 @@ namespace Api.Test.Controllers
             _proxy = serviceProxy;
         }
 
+        [HttpGet("google")]
+        public async Task<IActionResult> Google(CancellationToken token)
+        {
+            HttpClient p = new HttpClient
+            {
+            };
+
+            var result = await p.GetAsync("http://google.com/", token);
+            var content = await result.Content.ReadAsStringAsync();
+            return Ok("UPDATED 6</br>" + content);
+        }
+
         [HttpGet("ping")]
         public async Task<IActionResult> Ping(CancellationToken token)
         {
             var result = await _proxy.Call().Ping(token);
-            return Ok(result);
+            return Ok(result + " - upgraded 7");
         }
 
         [HttpGet("pingd")]
@@ -34,7 +46,7 @@ namespace Api.Test.Controllers
         {
             using var client = new HttpClient
             {
-                BaseAddress = new Uri("http://exs")
+                BaseAddress = new Uri("http://exs.default.svc.cluster.local")
             };
 
             var response = await client.PostAsync("/exampleservicestate/ping", null, token);

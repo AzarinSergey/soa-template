@@ -22,12 +22,13 @@ foreach($item in $app_manifest["app"]['services'])
 	Write-Host Service name: $($item.name)
 	Write-Host registry: $($item.registry)
 	Write-Host tag: $($item.tag)
-	Write-Host dockerfile directory: $($item.dockerfileDir)
+	Write-Host dockerfile directory: $($item.projectDir)
 	Write-Host helm directory: $($item.helmDir)
 
 	$imageName = $item.registry + '/' + $item.name + ':' + $item.tag
 	minikube docker-env | Invoke-Expression
-	docker build -t $imageName $item.dockerfileDir
+
+	docker build -t $imageName $item.projectDir
 	$helmName = $item.registry + '-' + $item.name
 	$helmChart = $helm_charts_folder + '\' + $item.name
 	helm install $helmName $helmChart 

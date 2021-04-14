@@ -26,3 +26,17 @@ helm list
 смотрим в миникубе сервисы:
  minikube service list
 
+
+
+
+ СМОТРЕТЬ ЛОГИ BRIDGE TO KUBERNETES:
+Set the environment variable MS_VS_AZUREDEVSPACES_TOOLS_LOGGING_ENABLED=true
+Open Visual Studio and run your scenario
+Provide logs from:
+%TEMP%/Bridge to Kubernetes
+%temp%\Microsoft.VisualStudio.Kubernetes.Debugging
+
+
+
+<service-name>.<namespace>.svc.cluster.local:<service-port>
+api-test.default.svc.cluster.local
