@@ -4,6 +4,6 @@
     {
         public const string SectionName = "ApplicationConfig";
 
-        public string ApplicationName { get; set; }
+        public string AppName { get; set; }
     }
 }

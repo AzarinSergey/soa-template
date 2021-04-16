@@ -1,10 +1,7 @@
-﻿using System;
-using Core.Service.Host.Client.DynamicProxy;
-using Core.Service.Host.Convention.Configuration;
-using Core.Service.Host.Convention.Convention;
+﻿using Core.Service.Host.Client.DynamicProxy;
 using Core.Service.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using System;
 
 namespace Core.Service.Host.Client.ServiceCollectionExtensions
 {
@@ -15,9 +12,10 @@ namespace Core.Service.Host.Client.ServiceCollectionExtensions
         {
             services.AddHttpClient<ServiceProxy<T>>((provider, client) =>
             {
-                var cfg = provider.GetRequiredService<IOptions<ApplicationConfig>>().Value;
-                var convention = provider.GetRequiredService<IServiceEndpointConvention>();
-                client.BaseAddress = new Uri($"http://{serviceName}:");
+                var hostEnvName = serviceName.ToUpperInvariant() + "_SERVICE_HOST";
+                var serviceHost = Environment.GetEnvironmentVariable(hostEnvName);
+
+                client.BaseAddress = new Uri($"http://{serviceHost}");
             });
         }
     }

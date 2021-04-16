@@ -1,0 +1,4 @@
+﻿version: 0.1
+env:
+  - name: EXS_SERVICE_HOST
+    value: $(services:exs.default)
