@@ -31,7 +31,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.yaml" />
-    <Content Include="commands.json" />
     <Content Include="ReadMe.md" />
   </ItemGroup>
   <ItemGroup>
