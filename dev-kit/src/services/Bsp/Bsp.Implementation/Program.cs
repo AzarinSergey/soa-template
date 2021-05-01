@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Blg.Implementation
+namespace Bsp.Implementation
 {
     public class Program
     {

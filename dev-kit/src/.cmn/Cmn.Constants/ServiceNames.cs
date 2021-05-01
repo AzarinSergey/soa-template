@@ -7,6 +7,6 @@
     {
         public const string BackendExample = "exs";
         public const string ApiTest = "api_test";
-        public const string Blog = "blg";
+        public const string BookShop = "bsp";
     }
 }

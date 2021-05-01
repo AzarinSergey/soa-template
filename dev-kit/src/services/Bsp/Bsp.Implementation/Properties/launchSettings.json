@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Blg.Implementation": {
+    "Bsp.Implementation": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

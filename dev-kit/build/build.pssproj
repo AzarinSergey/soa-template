@@ -38,6 +38,12 @@
     <Compile Include="run_local_cluster.ps1" />
     <Compile Include="upgrade_service.ps1" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="deploy\" />
+    <Folder Include="deploy\local\" />
+    <Folder Include="deploy\local\bsp\" />
+    <Folder Include="deploy\local\bsp\templates\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
   <Import Project="$(MSBuildExtensionsPath)\PowerShell Tools for Visual Studio\PowerShellTools.targets" Condition="Exists('$(MSBuildExtensionsPath)\PowerShell Tools for Visual Studio\PowerShellTools.targets')" />

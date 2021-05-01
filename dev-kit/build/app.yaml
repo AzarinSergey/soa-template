@@ -8,11 +8,11 @@ app:
     projectDir: src\services\Api\Api.Test
     helmDir: deploy\local\apitest
 
-  - name: blg
+  - name: bsp
     registry: soa-template
     tag: develop
-    projectDir: src\services\Blg\Blg.Implementation
-    helmDir: deploy\local\blg
+    projectDir: src\services\Bsp\Bsp.Implementation
+    helmDir: deploy\local\bsp
 
   - name: exs
     registry: soa-template

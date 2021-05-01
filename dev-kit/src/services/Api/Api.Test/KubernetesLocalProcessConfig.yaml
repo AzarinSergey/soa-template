@@ -2,3 +2,5 @@
 env:
   - name: EXS_SERVICE_HOST
     value: $(services:exs.default)
+  - name: BSP_SERVICE_HOST
+    value: $(services:bsp.default)

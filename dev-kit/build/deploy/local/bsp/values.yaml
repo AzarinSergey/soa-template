@@ -1,9 +1,9 @@
-fullnameOverride: api-test
+fullnameOverride: bsp
 replicaCount: 1
 image:
-  repository: soa-template/api-test
+  repository: soa-template/bsp
   tag: develop
-  pullPolicy: Never
+  pullPolicy: IfNotPresent
 imagePullSecrets: []
 
 service:
@@ -19,11 +19,11 @@ probes:
 ingress:
   enabled: false
   annotations: {}
- 
+   
   path: /
-  
+
   tls: []
-  
+
 secrets: {}
 
 resources: {}

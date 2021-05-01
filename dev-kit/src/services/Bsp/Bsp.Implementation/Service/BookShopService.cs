@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Service.Host;
@@ -6,14 +6,14 @@ using Core.Service.Host.Convention.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Exs.Implementation.Service
+namespace Bsp.Implementation.Service
 {
-    public partial class ExampleService : StatelessService
+    public partial class BookShopService : StatelessService
     {
-        private readonly ILogger<ExampleService> _logger;
+        private readonly ILogger<BookShopService> _logger;
 
-        public ExampleService(IOptions<ServiceConfig> config, ILogger<ExampleService> logger)
-        : base(config.Value)
+        public BookShopService(IOptions<ServiceConfig> config, ILogger<BookShopService> logger)
+            : base(config.Value)
         {
             _logger = logger;
         }

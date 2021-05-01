@@ -11,4 +11,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Kubernetes.Tools.Targets" Version="1.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\.core\Core.Service.Host\Core.Service.Host.csproj" />
+    <ProjectReference Include="..\Bsp.Contract.Service\Bsp.Contract.Service.csproj" />
+  </ItemGroup>
+
 </Project>

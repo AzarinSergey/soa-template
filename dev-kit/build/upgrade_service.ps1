@@ -8,7 +8,7 @@ chcp 65001
 
 if(((Get-Module -ListAvailable *) | select -ExpandProperty Name) -notcontains 'powershell-yaml' )
 {
-	Write-Host -BackgroundColor Red ('ERROR! Have run command: Install-Module -Name powershell-yaml')
+	Write-Host -BackgroundColor Red ('ERROR! Run the command: Install-Module -Name powershell-yaml')
 	return;
 }
 

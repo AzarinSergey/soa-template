@@ -2,7 +2,7 @@
 
 if(((Get-Module -ListAvailable *) | select -ExpandProperty Name) -notcontains 'powershell-yaml' )
 {
-	Write-Host -BackgroundColor Red ('ERROR! Have run command: Install-Module -Name powershell-yaml')
+	Write-Host -BackgroundColor Red ('ERROR! Run the command: Install-Module -Name powershell-yaml')
 	return;
 }
 
@@ -28,7 +28,7 @@ foreach($item in $app_manifest["app"]['services'])
 	$imageName = $item.registry + '/' + $item.name + ':' + $item.tag
 	minikube docker-env | Invoke-Expression
 
-	docker build -t $imageName $item.projectDir
+	docker build -t $imageName $item.projectDir --no-cache --label "tmp"
 	$helmName = $item.registry + '-' + $item.name
 	$helmChart = $helm_charts_folder + '\' + $item.name
 	helm install $helmName $helmChart 
