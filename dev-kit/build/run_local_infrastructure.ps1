@@ -1,0 +1,1 @@
+﻿docker-compose -f .\build\deploy\local\docker-compose.infrastructure.yaml --env-file .\build\deploy\local\infrastructure.env up -d

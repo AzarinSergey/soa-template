@@ -28,3 +28,8 @@ spec:
               port: {{ .Values.deployment.containers.containerPort }}
             periodSeconds: 30
             initialDelaySeconds: 30
+          env:
+          - name: REDIS_HOST
+            value: {{ .Values.infrastructure.redis.host | quote }}
+          - name: REDIS_PORT
+            value: {{ .Values.infrastructure.redis.port | quote }}

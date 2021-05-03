@@ -30,12 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="app.local.env" />
+    <Content Include="deploy\local\infrastructure.env" />
     <Content Include="app.yaml" />
     <Content Include="ReadMe.md" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="deploy\local\docker-compose.infrastructure.yaml" />
+    <Compile Include="kill_local_infrastructure.ps1" />
     <Compile Include="kill_local_cluster.ps1" />
+    <Compile Include="run_local_infrastructure.ps1" />
     <Compile Include="run_local_cluster.ps1" />
     <Compile Include="upgrade_service.ps1" />
   </ItemGroup>

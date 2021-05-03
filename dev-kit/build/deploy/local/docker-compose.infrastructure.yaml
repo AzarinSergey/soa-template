@@ -1,0 +1,36 @@
+---
+version: "3.7"
+services:
+  dev-kit-redis:
+    image: redis:5.0.9
+    container_name: ${APP_NAME}-${REDIS_CONTAINER_NAME}
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT}:6379"
+    labels:
+      - solution=${APP_NAME}-${REDIS_CONTAINER_NAME}
+    volumes:
+      - dev-kit-redis:/data
+    networks:
+      - dev-kit-network
+
+  dev-kit-redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: ${APP_NAME}-redis-commander
+    environment:
+      - REDIS_HOSTS=local:${APP_NAME}-${REDIS_CONTAINER_NAME}:6379
+    ports:
+      - 6279:8081
+    depends_on:
+      - dev-kit-redis
+    networks:
+      - dev-kit-network
+
+
+volumes:
+  dev-kit-redis:
+
+networks:
+  dev-kit-network:
+    name: dev-kit-network
+    driver: bridge

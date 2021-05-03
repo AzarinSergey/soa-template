@@ -16,3 +16,8 @@ deployment:
       getPath: /tool/health
 
 replicaCount: 1
+
+infrastructure:
+  redis:
+    host: localhost
+    port: 9000
