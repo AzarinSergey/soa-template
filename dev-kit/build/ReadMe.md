@@ -3,7 +3,7 @@
 
 CHEAT SHEET:
 select dhcp Ip address:
-Get-NetIPAddress | where SuffixOrigin -eq Dhcp |Select -ExpandProperty IPAddress
+(Get-NetIPConfiguration | Where-Object {$_.IPv4DefaultGateway -ne $null -and $_.NetAdapter.status -ne "Disconnected"}).IPv4Address.IPAddress
 
 Get-NetAdapter
 New-VMSwitch -name MinikubeSwitch  -NetAdapterName "Ethernet 3"  -AllowManagementOS $true

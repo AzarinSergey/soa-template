@@ -6,7 +6,7 @@ param(
 
 chcp 65001
 
-if(((Get-Module -ListAvailable *) | select -ExpandProperty Name) -notcontains 'powershell-yaml' )
+if(((Get-Module -ListAvailable *) | Select-Object -ExpandProperty Name) -notcontains 'powershell-yaml' )
 {
 	Write-Host -BackgroundColor Red ('ERROR! Run the command: Install-Module -Name powershell-yaml')
 	return;
@@ -20,7 +20,7 @@ $app_manifest = Get-Content (Join-Path -Path $($root_folder) -ChildPath "\build\
 
 
 #PREPARE VARIABLES
-$service_config = $app_manifest["app"]['services'] | where -Property name -eq $serviceName
+$service_config = $app_manifest["app"]['services'] | Where-Object -Property name -eq $serviceName
 $imageRandomTag =  $service_config.tag + '-' + $(New-Guid)
 $imageName = $service_config.registry + '/' + $service_config.name + ':' + $imageRandomTag
 $helmName = $service_config.registry + '-' + $service_config.name

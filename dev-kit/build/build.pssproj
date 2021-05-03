@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="app.local.env" />
     <Content Include="app.yaml" />
     <Content Include="ReadMe.md" />
   </ItemGroup>
