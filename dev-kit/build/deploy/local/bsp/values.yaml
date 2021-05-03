@@ -18,9 +18,8 @@ deployment:
 replicaCount: 1
 
 infrastructure:
-  redis:
-    host: localhost
-    port: 9000
-  postgres:
-    host: localhost
-    port: 8000
+  environmentname: ""
+  appname: ""
+  connections:
+    RedisConnection: ""
+    PostgresConnection: ""

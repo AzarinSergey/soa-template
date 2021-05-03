@@ -14,8 +14,14 @@ namespace Silo
                 siloBuilder.UseKubernetesHosting();
 
                 //var redisConnectionString = $"{Environment.GetEnvironmentVariable("REDIS")}:6379";
-                //siloBuilder.UseRedisClustering(options => options.ConnectionString = redisConnectionString);
-                //siloBuilder.AddRedisGrainStorage("definitions", options => options.ConnectionString = redisConnectionString);
+                siloBuilder.UseRedisClustering(options =>
+                {
+                    options.ConnectionString = "";
+                });
+                siloBuilder.AddRedisGrainStorage("definitions", options =>
+                {
+                    options.ConnectionString = "";
+                });
 
             }).RunConsoleAsync();
         }

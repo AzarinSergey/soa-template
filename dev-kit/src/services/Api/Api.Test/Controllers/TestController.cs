@@ -10,28 +10,26 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Tool;
 using Exs.Contract.Service.Models;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Api.Test.Controllers
 {
     public class TestController : ApiControllerBase
     {
         private readonly ServiceProxy<IExampleServiceState> _proxy;
+        private readonly IOptions<ApiTestServiceConfig> _opt;
 
-        public TestController(ServiceProxy<IExampleServiceState> serviceProxy)
+        public TestController(ServiceProxy<IExampleServiceState> serviceProxy, IOptions<ApiTestServiceConfig> opt)
         {
             _proxy = serviceProxy;
+            _opt = opt;
         }
 
-        [HttpGet("google")]
-        public async Task<IActionResult> Google(CancellationToken token)
+        [HttpGet("PrintOptions")]
+        public IActionResult PrintOptions()
         {
-            HttpClient p = new HttpClient
-            {
-            };
-
-            var result = await p.GetAsync("http://google.com/", token);
-            var content = await result.Content.ReadAsStringAsync();
-            return Ok("UPDATED 6</br>" + content);
+            return Ok(Tools.Json.Serializer.Serialize(_opt.Value, Formatting.Indented));
         }
 
         [HttpGet("ping")]

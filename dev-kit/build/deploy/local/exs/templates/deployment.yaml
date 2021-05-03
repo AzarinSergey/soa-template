@@ -29,11 +29,11 @@ spec:
             periodSeconds: 30
             initialDelaySeconds: 30
           env:
-          - name: REDIS_HOST
-            value: {{ .Values.infrastructure.redis.host | quote }}
-          - name: REDIS_PORT
-            value: {{ .Values.infrastructure.redis.port | quote }}
-          - name: POSTGRES_HOST
-            value: {{ .Values.infrastructure.postgres.host | quote }}
-          - name: POSTGRES_PORT
-            value: {{ .Values.infrastructure.postgres.port | quote }}
+          - name: ASPNETCORE_ENVIRONMENT
+            value: {{ .Values.infrastructure.environmentname }}
+          - name: ApplicationConfig__AppName
+            value: {{ .Values.infrastructure.appname }}
+          - name: ServiceConfig__ServiceName
+            value: {{ include "exs.fullname" . }}
+          - name: ServiceConfig__PostgresConnection
+            value: {{ .Values.infrastructure.connections.PostgresConnection | quote }}

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Bsp.Contract.Service;
+using Core.Service.Host.Convention.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Api.Test
 {
@@ -18,11 +20,17 @@ namespace Api.Test
         {
             services.RegisterInternalServiceProxy<IExampleServiceState>(ServiceNames.BackendExample);
             services.RegisterInternalServiceProxy<IBookShopService>(ServiceNames.BookShop);
+
+            services.Configure<ApiTestServiceConfig>(Configuration.GetSection(ServiceConfig.SectionName));
         }
 
         public override void ServiceConfiguration(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
+            
         }
+
+        public override ServiceConfig ResolveServiceConfigObject(IApplicationBuilder app)
+            => app.ApplicationServices.GetRequiredService<IOptions<ApiTestServiceConfig>>().Value;
+        
     }
 }

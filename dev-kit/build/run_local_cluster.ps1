@@ -28,11 +28,13 @@ foreach($item in $app_manifest["app"]['services'])
 	minikube docker-env | Invoke-Expression
 	docker build -t $imageName $item.projectDir --no-cache --label "tmp"
 
+	
 	helm install $helmName $helmChart  `
-	--set infrastructure.redis.host=$($local_user_ipaddress) `
-	--set infrastructure.redis.port=$($app_local_env.REDIS_PORT) `
-	--set infrastructure.postgres.host=$($local_user_ipaddress) `
-	--set infrastructure.postgres.port=$($app_local_env.POSTGRES_PORT) `
+	--set infrastructure.environmentname=$($app_local_env.ASPNETCORE_ENVIRONMENT) `
+	--set infrastructure.appname=$($app_local_env.APP_NAME) `
+	--set infrastructure.connections.RedisConnection=$("$($local_user_ipaddress):$($app_local_env.REDIS_PORT)") `
+	--set infrastructure.connections.PostgresConnection=$("Host=$($local_user_ipaddress);Port=$($app_local_env.POSTGRES_PORT);Database=$($app_local_env.POSTGRES_USER_DB);Username=$($app_local_env.POSTGRES_USER_NAME);Password=$($app_local_env.POSTGRES_USER_PASSWORD)") `
+
 
 	Write-Host \n\t---SERVICE PUBLISHED--- $imageName
 }

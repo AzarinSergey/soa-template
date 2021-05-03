@@ -8,7 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Core.Tool;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace Core.Service.Host
@@ -54,6 +57,7 @@ namespace Core.Service.Host
 
             const string healthPath = "/tool/health";
             const string printEnvPath = "/tool/printEnv";
+            const string printOptPath = "/tool/printOpt";
 
             app.UseEndpoints(endpoints =>
             {
@@ -68,6 +72,11 @@ namespace Core.Service.Host
                 {
                     await context.Response.WriteAsync($"{Tools.Json.Serializer.Serialize(Environment.GetEnvironmentVariables(), Formatting.Indented)}");
                 });
+
+                endpoints.MapGet(printOptPath, async context =>
+                {
+                    await context.Response.WriteAsync($"{Tools.Json.Serializer.Serialize(ResolveServiceConfigObject(app), Formatting.Indented)}");
+                });
             });
 
             var serviceEndpointConvention = app.ApplicationServices.GetRequiredService<IServiceEndpointConvention>();
@@ -80,5 +89,7 @@ namespace Core.Service.Host
 
         public abstract void RegisterStatelessService(IServiceCollection c);
         public abstract void ServiceConfiguration(IApplicationBuilder app, IWebHostEnvironment env);
+        public virtual ServiceConfig ResolveServiceConfigObject(IApplicationBuilder app)
+            => app.ApplicationServices.GetRequiredService<IOptions<ServiceConfig>>().Value;
     }
 }
