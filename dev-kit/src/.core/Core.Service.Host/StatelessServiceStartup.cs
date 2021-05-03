@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Core.Tool;
+using Newtonsoft.Json;
 
 namespace Core.Service.Host
 {
@@ -51,6 +53,7 @@ namespace Core.Service.Host
             app.UseRouting();
 
             const string healthPath = "/tool/health";
+            const string printEnvPath = "/tool/printEnv";
 
             app.UseEndpoints(endpoints =>
             {
@@ -59,6 +62,11 @@ namespace Core.Service.Host
                 endpoints.MapGet(healthPath, async context =>
                 {
                     await context.Response.WriteAsync($"===> OK <=== \n {Tool.Tools.Json.Serializer.Serialize(context.Request.Headers)}");
+                });
+
+                endpoints.MapGet(printEnvPath, async context =>
+                {
+                    await context.Response.WriteAsync($"{Tools.Json.Serializer.Serialize(Environment.GetEnvironmentVariables(), Formatting.Indented)}");
                 });
             });
 

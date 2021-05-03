@@ -46,6 +46,10 @@ docker build -t $imageName $service_config.projectDir --no-cache --label "tmp"
 #UPDATE SERVICE
 helm upgrade $helmName $helmChart --debug --set image.tag=$($imageRandomTag)
 
+#DEATTACH CONSOLE FROM MINIKUBE DOCKER ENV
+ minikube docker-env --unset | Invoke-Expression
+
 #INFO OUTPUT
 helm history $helmName
 minikube service list
+
