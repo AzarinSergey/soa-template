@@ -1,73 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "bspimplementation.fullname" . }}
+  name: {{ include "bsp.fullname" . }}
   labels:
-    app: {{ template "bspimplementation.name" . }}
-    chart: {{ template "bspimplementation.chart" . }}
-    draft: {{ .Values.draft | default "draft-app" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    {{- include "bsp.labels" . | nindent 4 }}
 spec:
-  revisionHistoryLimit: 0
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "bspimplementation.name" . }}
-      release: {{ .Release.Name }}
+      {{- include "bsp.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ template "bspimplementation.name" . }}
-        draft: {{ .Values.draft | default "draft-app" }}
-        release: {{ .Release.Name }}
-      annotations:
-        buildID: {{ .Values.buildID | default "" | quote }}
+        {{- include "bsp.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.deployment.containerPort }}
+              containerPort: {{ .Values.deployment.containers.containerPort }}
               protocol: TCP
-          {{- if .Values.probes.enabled }}
           livenessProbe:
             httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          {{- end }}
-          env:
-            {{- $root := . }}
-            {{- range $ref, $values := .Values.secrets }}
-            {{- range $key, $value := $values }}
-            - name: {{ $ref }}_{{ $key }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "bspimplementation.fullname" $root }}-{{ $ref | lower }}
-                  key: {{ $key }}
-            {{- end }}
-            {{- end }}
-          resources:
-{{ toYaml .Values.resources | indent 12 }}
-    {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+              path: {{ .Values.deployment.containers.livenessProbe.getPath }}
+              port: {{ .Values.deployment.containers.containerPort }}
+            periodSeconds: 30
+            initialDelaySeconds: 30

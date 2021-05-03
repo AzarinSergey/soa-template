@@ -1,12 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "bspimplementation.fullname" . }}
+  name: {{ include "bsp.fullname" . }}
   labels:
-    app: {{ template "bspimplementation.name" . }}
-    chart: {{ template "bspimplementation.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    {{- include "bsp.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -15,5 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ template "bspimplementation.name" . }}
-    release: {{ .Release.Name }}
+    {{- include "bsp.selectorLabels" . | nindent 4 }}

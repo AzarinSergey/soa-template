@@ -1,35 +1,18 @@
-fullnameOverride: exs
-replicaCount: 1
 image:
   repository: soa-template/exs
-  tag: develop
   pullPolicy: IfNotPresent
-imagePullSecrets: []
+  tag: develop
+
+nameOverride: exs
 
 service:
   type: NodePort
   port: 80
 
 deployment:
-  containerPort: 80
+  containers:
+    containerPort: 80
+    livenessProbe:
+      getPath: /tool/health
 
-probes:
-  enabled: false
-
-ingress:
-  enabled: false
-  annotations: {}
-    
-  path: /
-  
-  tls: []
-  
-secrets: {}
-  
-resources: {}
-  
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+replicaCount: 1
