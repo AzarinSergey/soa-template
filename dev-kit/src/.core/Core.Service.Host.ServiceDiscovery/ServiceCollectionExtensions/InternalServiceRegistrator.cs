@@ -13,9 +13,15 @@ namespace Core.Service.Host.Client.ServiceCollectionExtensions
             services.AddHttpClient<ServiceProxy<T>>((provider, client) =>
             {
                 var hostEnvName = serviceName.ToUpperInvariant() + "_SERVICE_HOST";
+
+                //Here env var defined when Kubebridge runs at least once for service witch using this http client
                 var serviceHost = Environment.GetEnvironmentVariable(hostEnvName);
 
-                client.BaseAddress = new Uri($"http://{serviceHost}");
+                var serviceUrl = string.IsNullOrEmpty(serviceHost) 
+                    ? $"http://{serviceName}"  
+                    : $"http://{serviceHost}";
+
+                client.BaseAddress = new Uri(serviceUrl);
             });
         }
     }

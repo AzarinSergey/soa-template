@@ -1,12 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "apitest.fullname" . }}
+  name: {{ include "api-test.fullname" . }}
   labels:
-    app: {{ template "apitest.name" . }}
-    chart: {{ template "apitest.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    {{- include "api-test.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -15,5 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ template "apitest.name" . }}
-    release: {{ .Release.Name }}
+    {{- include "api-test.selectorLabels" . | nindent 4 }}

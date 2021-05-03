@@ -1,35 +1,23 @@
-fullnameOverride: api-test
-replicaCount: 1
+# Default values for api-test.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
 image:
   repository: soa-template/api-test
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
   tag: develop
-  pullPolicy: Never
-imagePullSecrets: []
+
+nameOverride: api-test
 
 service:
   type: NodePort
   port: 80
 
 deployment:
-  containerPort: 80
+  containers:
+    containerPort: 80
+    livenessProbe:
+      getPath: /tool/health
 
-probes:
-  enabled: false
-
-ingress:
-  enabled: false
-  annotations: {}
- 
-  path: /
-  
-  tls: []
-  
-secrets: {}
-
-resources: {}
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+replicaCount: 1

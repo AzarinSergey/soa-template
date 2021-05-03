@@ -2,6 +2,9 @@
 
 
 CHEAT SHEET:
+select dhcp Ip address:
+Get-NetIPAddress | where SuffixOrigin -eq Dhcp |Select -ExpandProperty IPAddress
+
 Get-NetAdapter
 New-VMSwitch -name MinikubeSwitch  -NetAdapterName "Ethernet 3"  -AllowManagementOS $true
 

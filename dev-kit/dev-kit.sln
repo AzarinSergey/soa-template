@@ -55,6 +55,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bsp.Model", "src\services\B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bsp.Domain", "src\services\Bsp\Bsp.Domain\Bsp.Domain.csproj", "{716047C8-4271-4223-A1D0-F35E58E7C3BC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silo", "Silo", "{787DA230-F44B-417A-945C-BB5074F30907}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silo", "src\services\Silo\Silo.Host\Silo.csproj", "{EC068B06-22B4-4944-B780-3B3C33670EC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -145,6 +149,10 @@ Global
 		{716047C8-4271-4223-A1D0-F35E58E7C3BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{716047C8-4271-4223-A1D0-F35E58E7C3BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{716047C8-4271-4223-A1D0-F35E58E7C3BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC068B06-22B4-4944-B780-3B3C33670EC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC068B06-22B4-4944-B780-3B3C33670EC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC068B06-22B4-4944-B780-3B3C33670EC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC068B06-22B4-4944-B780-3B3C33670EC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,6 +178,7 @@ Global
 		{550C0EEF-D826-4032-9C49-88B8F7868230} = {1300B31A-D360-4B48-8F13-D60F24BD6074}
 		{E8D6BD3B-FABD-4C01-9DD9-C3D5BECF4F44} = {1300B31A-D360-4B48-8F13-D60F24BD6074}
 		{716047C8-4271-4223-A1D0-F35E58E7C3BC} = {1300B31A-D360-4B48-8F13-D60F24BD6074}
+		{EC068B06-22B4-4944-B780-3B3C33670EC0} = {787DA230-F44B-417A-945C-BB5074F30907}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2AF9839B-1F28-4267-927A-F888045F1BF6}
