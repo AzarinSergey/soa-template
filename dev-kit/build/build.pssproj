@@ -32,10 +32,20 @@
   <ItemGroup>
     <Content Include="deploy\local\infrastructure.env" />
     <Content Include="app.yaml" />
+    <Content Include="deploy\local\postgres\sql\0_extensions.sql" />
+    <Content Include="deploy\local\postgres\sql\1_create_database_initial.sql" />
+    <Content Include="deploy\local\postgres\sql\2_create_bsp_schema_tables.sql" />
+    <Content Include="deploy\local\postgres\sql\3_create_wzd_schema_tables.sql" />
+    <Content Include="deploy\local\postgres\sql\4_create_rdr_schema_tables.sql" />
+    <Content Include="deploy\local\postgres\sql\5_create_sts_schema_tables.sql" />
+    <Content Include="deploy\local\postgres\sql\6_init_defaults.sql" />
+    <Content Include="deploy\local\postgres\sql\7_indexes_constraints.sql" />
     <Content Include="ReadMe.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="deploy\local\docker-compose.infrastructure.yaml" />
+    <Compile Include="deploy\local\postgres\bash\server_config.sh" />
+    <Compile Include="deploy\local\postgres\pgadmin\servers.json" />
     <Compile Include="kill_local_infrastructure.ps1" />
     <Compile Include="kill_local_cluster.ps1" />
     <Compile Include="run_local_infrastructure.ps1" />
@@ -47,6 +57,10 @@
     <Folder Include="deploy\local\" />
     <Folder Include="deploy\local\bsp\" />
     <Folder Include="deploy\local\bsp\templates\" />
+    <Folder Include="deploy\local\postgres\" />
+    <Folder Include="deploy\local\postgres\bash\" />
+    <Folder Include="deploy\local\postgres\pgadmin\" />
+    <Folder Include="deploy\local\postgres\sql\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />

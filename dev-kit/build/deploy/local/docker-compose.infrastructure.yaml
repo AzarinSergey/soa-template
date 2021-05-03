@@ -3,12 +3,10 @@ version: "3.7"
 services:
   dev-kit-redis:
     image: redis:5.0.9
-    container_name: ${APP_NAME}-${REDIS_CONTAINER_NAME}
+    container_name: ${APP_NAME}-redis
     restart: unless-stopped
     ports:
       - "${REDIS_PORT}:6379"
-    labels:
-      - solution=${APP_NAME}-${REDIS_CONTAINER_NAME}
     volumes:
       - dev-kit-redis:/data
     networks:
@@ -18,17 +16,54 @@ services:
     image: rediscommander/redis-commander:latest
     container_name: ${APP_NAME}-redis-commander
     environment:
-      - REDIS_HOSTS=local:${APP_NAME}-${REDIS_CONTAINER_NAME}:6379
+      - REDIS_HOSTS=local:${APP_NAME}-redis:6379
     ports:
-      - 6279:8081
+      - ${REDIS_UI_PORT}:8081
     depends_on:
       - dev-kit-redis
     networks:
       - dev-kit-network
 
+  dev-kit-postgres:
+    container_name: ${APP_NAME}-postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_ADMIN_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD}
+      POSTGRES_USER_NAME: ${POSTGRES_USER_NAME}
+      POSTGRES_USER_PASSWORD: ${POSTGRES_USER_PASSWORD}
+      POSTGRES_USER_DB: ${POSTGRES_USER_DB}
+      POSTGRES_USER_TABLESPACE: ${POSTGRES_USER_TABLESPACE}
+    volumes:
+      - dev-kit-postgres-db:/var/lib/postgresql/data
+      - ./postgres/bash:/docker-entrypoint-initdb.d:rw
+      - ./postgres/sql:/tmp/sql
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    restart: unless-stopped
+    networks:
+      - dev-kit-network
+  
+  dev-kit-pgadmin:
+    container_name: ${APP_NAME}-pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${POSTGRES_UI_LOGIN}
+      PGADMIN_DEFAULT_PASSWORD: ${POSTGRES_UI_PASSWORD}
+    volumes:
+       - dev-kit-pgadmin:/root/.pgadmin:rw
+       - ./postgres/pgadmin/servers.json:/pgadmin4/servers.json
+    ports:
+      - "${POSTGRES_UI_PORT}:80"
+    restart: unless-stopped
+    networks:
+      - dev-kit-network
 
+      
 volumes:
   dev-kit-redis:
+  dev-kit-pgadmin:
+  dev-kit-postgres-db:
 
 networks:
   dev-kit-network:

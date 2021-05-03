@@ -1,4 +1,8 @@
 CHEAT SHEET:
+
+WSL docker volumes location:
+\\wsl$\docker-desktop-data\version-pack-data\community\docker\volumes
+
 select dhcp Ip address:
 (Get-NetIPConfiguration | Where-Object {$_.IPv4DefaultGateway -ne $null -and $_.NetAdapter.status -ne "Disconnected"}).IPv4Address.IPAddress
 
@@ -28,6 +32,9 @@ helm list
 
 
  minikube service list
+
+ Remove referenced docker volumes:
+ docker volume rm local_dev-kit-pgadmin,  local_dev-kit-postgres-db, local_dev-kit-redis
 
  Check service name inside pod of service with command 'printenv'. 
 

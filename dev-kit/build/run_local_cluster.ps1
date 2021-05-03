@@ -31,6 +31,8 @@ foreach($item in $app_manifest["app"]['services'])
 	helm install $helmName $helmChart  `
 	--set infrastructure.redis.host=$($local_user_ipaddress) `
 	--set infrastructure.redis.port=$($app_local_env.REDIS_PORT) `
+	--set infrastructure.postgres.host=$($local_user_ipaddress) `
+	--set infrastructure.postgres.port=$($app_local_env.POSTGRES_PORT) `
 
 	Write-Host \n\t---SERVICE PUBLISHED--- $imageName
 }

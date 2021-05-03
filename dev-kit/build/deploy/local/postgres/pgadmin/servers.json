@@ -1,0 +1,22 @@
+{
+    "Servers": {
+      "dev_kit_user": {
+        "Name": "dev_kit_user",
+        "Group": "Servers",
+        "Port": 5432,
+        "Username": "dev_kit_user",
+        "Host": "soa-template-postgres",
+        "SSLMode": "prefer",
+        "MaintenanceDB": "dev_kit_db"
+      },
+      "admin-user": {
+        "Name": "admin-user",
+        "Group": "Servers",
+        "Port": 5432,
+        "Username": "admin",
+        "Host": "soa-template-postgres",
+        "SSLMode": "prefer",
+        "MaintenanceDB": "postgres"
+      }
+    }
+}

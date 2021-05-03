@@ -33,3 +33,7 @@ spec:
             value: {{ .Values.infrastructure.redis.host | quote }}
           - name: REDIS_PORT
             value: {{ .Values.infrastructure.redis.port | quote }}
+          - name: POSTGRES_HOST
+            value: {{ .Values.infrastructure.postgres.host | quote }}
+          - name: POSTGRES_PORT
+            value: {{ .Values.infrastructure.postgres.port | quote }}
