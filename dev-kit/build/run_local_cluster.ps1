@@ -25,7 +25,6 @@ foreach($item in $app_manifest["app"]['services'])
 
 	Write-Host \n\t---PUBLISH SERVICE--- $imageName
 
-	minikube docker-env | Invoke-Expression
 	docker build -t $imageName $item.projectDir --no-cache --label "tmp"
 
 	
