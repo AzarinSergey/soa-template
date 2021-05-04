@@ -7,3 +7,7 @@
    * Two
    * Three 
   
+
+3. I'm using sample db:
+   ![sample_db_schema](content/db_schema.png)
+  

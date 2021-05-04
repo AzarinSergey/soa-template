@@ -1,5 +1,5 @@
-http://localhost:33301/all
-TODO:
-1. Health checks: https://docs.microsoft.com/ru-ru/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-3.1
-2. SwaggerGen for interface
-
+What I want to do: 
+1. SwaggerGen for service interface
+2. Orleans silo server for actors
+3. ...
+4. [Otus cource](/dev-kit/docs/README.md)
