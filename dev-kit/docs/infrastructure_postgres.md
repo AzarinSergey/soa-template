@@ -10,6 +10,6 @@
 
 It use pre defined config to create connections with existing server. [Check it](/dev-kit/build/deploy/local/postgres/pgadmin/servers.json) and use browser: 
 
-- UI located at http://localhost:9822
+- UI located at http://localhost:9822 ( Very slow on container start, please bear with it to use )
 - UI Login/pass: admin@admin.ru/password
 - Passwor for any user is 'password'
