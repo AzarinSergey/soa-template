@@ -3,7 +3,8 @@
 1. [Run postgres (and all that is needed)](infrastructure.md)
 2. Check homeworks:
 
-   * One
+   * [Old (scripts 0 - 7)](/dev-kit/build/deploy/local/postgres/sql)
+   * Next
    * Two
    * Three 
   
